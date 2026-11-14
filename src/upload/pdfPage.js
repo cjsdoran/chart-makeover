@@ -74,8 +74,9 @@ export async function pageTextLines(doc, n) {
       const h = it.height || Math.hypot(it.transform[2], it.transform[3]) || 10;
       return { text: it.str.replace(/\s+/g, ' ').trim(), x, y: baseline - h, w: it.width, h };
     })
-    // Drop strings that are only zero-width characters (matplotlib and PowerPoint write some).
-    .filter((it) => it.text.replace(/[​-‍﻿]/g, ''))
+    // Drop strings that are only zero-width or private-use characters: symbol-font glyphs (eg the
+    // class template's U+F0B2 decorations) and spacers carry no words.
+    .filter((it) => it.text.replace(/[​-‍﻿-\s]/g, ''))
     .sort((a, b) => a.y - b.y || a.x - b.x);
 
   const lines = [];

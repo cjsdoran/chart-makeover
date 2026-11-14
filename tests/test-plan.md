@@ -113,6 +113,14 @@ Unit and e2e tests run with every model call mocked (no cost). The read test (RT
 | T-E2E-1 | all | Playwright, model mocked: setup → upload C07 → Stage 1 (two rounds) → reading confirmed → Stage 2 (one decline, push-back) → Stage 3 → Stage 4 → Stage 5 → build the .pptx → record PDF | Completes; files download |
 | T-E2E-2 | CM-12 | Playwright, model mocked: C08 path with a route back to Stage 1, `reupload`, a new upload, Stages 3–5 on it | Completes |
 
+### Milestone 1–2 status (15 Nov 2026)
+
+Built and passing (`npm test`): T-SET-1, T-SU-1, T-SU-2 (stored; Stage 2/4/redraw use comes later), T-UP-1..9, T-PDF-1..3, T-PPTX-1..6, T-DET-1..2, T-READ-1..4, T-FN-1..3, T-RULES-1, T-SEC-1..2, T-ERR-1..2, T-SAV-1, T-CHAT-7 (read call only), plus the read-test comparator. Differences from §1:
+
+- The synthetic upload fixtures are built in memory by `tests/helpers/charts.js` (pdf-lib, jszip, @napi-rs/canvas), not committed as binaries.
+- `photo.heic`: no real HEIC file; T-UP-6 checks the HEIC path with a mocked converter (heic2any runs only in the browser). Check one real iPhone photo by hand before launch.
+- T-PDF-3 checks the asset URLs; the browser render with fonts was checked by hand in the browser pane (C09: text layer and 2,000 px page).
+
 ## 3. Real-model checks (only when Chris asks)
 
 | ID | Check | Pass |
