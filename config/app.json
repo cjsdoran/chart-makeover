@@ -1,0 +1,208 @@
+{
+  "_comment": "Chart Makeover v1 settings. Chris edits these without touching code: models, caps, upload limits, openers, redraw geometry, file names.",
+  "appName": "Chart Makeover",
+  "appVersion": "1.0",
+  "promptVersion": "1.0",
+  "rulesVersion": "1.0 (PRD rev 58, calibrated 14 Nov 2026)",
+  "firm": "Halden & Rowe",
+  "em": {
+    "name": "Daniel Hart",
+    "title": "Engagement Manager",
+    "signOff": "Daniel"
+  },
+  "course": "MGMT 5760",
+  "accessCodeEnv": "CM_ACCESS_CODE",
+  "models": {
+    "readChart": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 2500,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "stage1": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 1600,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "stage2": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 1600,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "stage3": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 1600,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "stage4": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 1600,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "stage5": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 1600,
+      "effort": "low",
+      "fallbacks": "default"
+    },
+    "redrawPlan": {
+      "model": "claude-opus-5-5",
+      "maxTokens": 3000,
+      "effort": "low",
+      "fallbacks": "default"
+    }
+  },
+  "functionBudgetSeconds": 24,
+  "keepAliveSeconds": 5,
+  "replyMaxAttempts": 3,
+  "regenerateOnCheckFailure": 2,
+  "caps": {
+    "leadRounds": 5,
+    "offerAtRound": 3,
+    "reopenedLeadRounds": 3,
+    "dataFitRounds": 3,
+    "chartChoiceRounds": 3,
+    "polishRounds": 3,
+    "fitReopens": 1,
+    "reuploads": 1,
+    "pushBacksPerFinding": 1,
+    "messageWords": 120,
+    "issuesShown": 3,
+    "messageWordsMax": 150,
+    "unreadablePerUpload": 3,
+    "declineReasonMinChars": 10
+  },
+  "upload": {
+    "accept": [
+      ".pptx",
+      ".pdf",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".heic"
+    ],
+    "maxMB": 20,
+    "pdfPages": 1,
+    "pptxSlides": 1,
+    "imageLongSidePx": 2000,
+    "oneChartMessage": "One chart, please.",
+    "recordImageLongSidePx": 1600,
+    "recordImageQuality": 0.85,
+    "imageMaxBytes": 3500000
+  },
+  "limits": {
+    "nameMaxChars": 60,
+    "studentIdMaxChars": 20,
+    "teamMaxChars": 40,
+    "caseMaxChars": 40,
+    "audienceMaxChars": 300,
+    "leadMaxChars": 300,
+    "correctionMaxChars": 300,
+    "comparisonMaxChars": 200,
+    "declineReasonMaxChars": 300,
+    "dataToSourceMaxChars": 200,
+    "pdfTextMaxChars": 20000,
+    "pptxTextMaxChars": 40000,
+    "chartXmlMaxChars": 20000,
+    "historyMaxChars": 30000,
+    "pptxMinTextShapes": 3,
+    "pictureCoverShare": 0.4,
+    "requestMaxBytes": 1048576,
+    "reviewMaxBytes": 2097152,
+    "readChartMaxBytes": 5242880
+  },
+  "messages": {
+    "opening": "Send me the one chart you want to work on: a PowerPoint slide, a PDF page or a photo. Who is this for, and what do they need to decide?",
+    "unreadable": "I can't read the chart you sent.",
+    "unreadableTryLater": "I still can't read it. Export the slide to PDF and try once more later.",
+    "sameLead": "That's the same lead as last time. Change it, then send it.",
+    "reupload": "Redraw the chart for your new lead and send it to me before we look at chart choice."
+  },
+  "openers": {
+    "setup": "Who is this for, and what do they need to decide?",
+    "stage1": "Forget the chart for a minute. What is the one thing you want them to remember?",
+    "stage2": "{summary} Right?",
+    "stage2Then": "Does this data prove your lead?",
+    "stage3": "What kind of comparison are you making?",
+    "stage4": null,
+    "stage5": "Here's the page I'll build: your lead and the fixes you accepted. Does it work?",
+    "lastMessage": "This is a dummy chart. Before it goes in the deck, replace the illustrative values with real data and check the source."
+  },
+  "comparisonOptions": [
+    "Items",
+    "Time",
+    "Distribution",
+    "Composition",
+    "Relationship",
+    "Framework"
+  ],
+  "redraw": {
+    "slide": {
+      "width": 10.83,
+      "height": 7.5
+    },
+    "background": "assets/template/title-only-bg.jpg",
+    "title": {
+      "x": 0.77,
+      "y": 0.05,
+      "w": 9.52,
+      "h": 0.95,
+      "fontSize": 24,
+      "bold": true,
+      "color": "1F497D"
+    },
+    "subheading": {
+      "x": 0.4,
+      "y": 0.98,
+      "w": 9.9,
+      "h": 0.5,
+      "fontSize": 24,
+      "bold": true,
+      "color": "000000",
+      "caps": true
+    },
+    "bodyZone": {
+      "x": 0.45,
+      "y": 1.55,
+      "w": 9.85,
+      "h": 5.35
+    },
+    "source": {
+      "x": 0.3,
+      "y": 6.95,
+      "w": 9,
+      "h": 0.3,
+      "fontSize": 12,
+      "bold": false
+    },
+    "slideNumber": {
+      "x": 10.33,
+      "y": 7.2,
+      "w": 0.5,
+      "h": 0.3
+    },
+    "illustrativeLabel": "Illustrative data",
+    "font": "Calibri",
+    "chartFontSize": 16,
+    "leadNumberFontSize": 24,
+    "colours": {
+      "subject": "033D93",
+      "comparison": "BFBFBF",
+      "others": [
+        "C00000",
+        "008000",
+        "FFC000"
+      ],
+      "title": "1F497D"
+    },
+    "fileName": "MGMT5760_{case}_ChartMakeover_{studentId}_{attemptId}_illustrative.pptx"
+  },
+  "record": {
+    "fileName": "MGMT5760_{case}_ChartMakeover_{studentId}_{attemptId}.pdf",
+    "footer": "MGMT 5760 practice tool. Feedback is AI-generated; you remain responsible for your work."
+  }
+}

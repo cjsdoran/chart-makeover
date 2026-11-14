@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage-review.json",
+  "title": "Stage review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "stage",
+    "round",
+    "verdict",
+    "findings",
+    "whatWorks",
+    "declineResponses",
+    "offeredLead",
+    "route",
+    "reopenStage",
+    "impression",
+    "message"
+  ],
+  "properties": {
+    "stage": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "revise",
+        "hardStop"
+      ],
+      "description": "hardStop if any finding is a hard stop; revise if any major; else pass"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "rules",
+          "severity",
+          "location",
+          "issue",
+          "fix"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^S[1-5]-[0-9]+$",
+            "description": "Stage and number, e.g. S2-1; keep the id when the same finding recurs"
+          },
+          "rules": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(L|D|C|P|F)[0-9]{1,2}$"
+            }
+          },
+          "severity": {
+            "enum": [
+              "hardStop",
+              "major",
+              "minor",
+              "suggestion"
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "issue": {
+            "type": "string"
+          },
+          "fix": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "whatWorks": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Null whenever a hard stop is present"
+    },
+    "declineResponses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "findingId",
+          "decision",
+          "message"
+        ],
+        "properties": {
+          "findingId": {
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "accept",
+              "pushBack"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "offeredLead": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Stage 1, round 3 or later, once only"
+    },
+    "route": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "const": "reupload"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "options"
+          ],
+          "properties": {
+            "options": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "rewriteLead",
+                  "nameData"
+                ]
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      ]
+    },
+    "reopenStage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 4
+    },
+    "impression": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Stage 4, on pass only"
+    },
+    "message": {
+      "type": "string",
+      "description": "Daniel's chat message, about 120 words at most"
+    }
+  }
+}

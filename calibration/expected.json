@@ -1,0 +1,798 @@
+{
+  "about": "Expected behaviour for calibration run 2, from Chris's run 1 feedback (chris-feedback.json) and the PRD's calibrated severities. Severity 'any' = any severity counts. stages = where the point may be raised; a point listed for [2,3] must be raised once, in either.",
+  "howToRun": "Stage 1: one round with studentLead. Chart stages: start Stage 2 with agreedLead (or pilotLead) as the agreed lead, readingCorrection empty, and simulate a student who accepts every fix, then run Stages 3, 4 and 5 in turn with the accepted fixes carried forward. Skip chart stages where chartStages is null.",
+  "globalMustNot": [
+    "A score of any kind",
+    "offeredLead before round 3",
+    "whatWorks when any finding is a hard stop",
+    "Stage 1 or 2 findings citing C or P rules",
+    "Stage 3 findings citing P rules",
+    "P1 at hard-stop severity",
+    "A typo that isn't on the page",
+    "Message over 150 words"
+  ],
+  "cases": {
+    "C01": {
+      "file": "inputs/C01_man_city_big_five.pptx",
+      "audience": "Board of a rival Premier League club. Decision: whether to raise a complaint that Man City's commercial revenue was out of line with its football record.",
+      "studentLead": "Looking at the data from 2008/09 to 2024/25, Manchester City's commercial revenue increased from £18m to £340m, which is faster than Arsenal, Chelsea, Liverpool and Manchester United, all of whom grew more slowly over the period",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L2",
+              "L6"
+            ],
+            "severity": "hardStop",
+            "point": "Describes growth and draws no conclusion for the board's question (Chris: no conclusion matters most)"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L9",
+              "L10"
+            ],
+            "severity": "major",
+            "point": "Far too wordy; 'Looking at the data…' opener; punch first, detail after"
+          }
+        ],
+        "mustNot": [
+          "Any comment on the chart (index, colours, legend)",
+          "Calling the chart good"
+        ]
+      },
+      "agreedLead": {
+        "text": "Man City had the fastest growing commercial revenue in the League",
+        "from": "chris"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              2
+            ],
+            "rules": [
+              "D1",
+              "D4"
+            ],
+            "severity": "any",
+            "point": "League performance missing: five clubs can't show 'in the League' or answer the board (Chris: no league performance matters most)"
+          },
+          {
+            "stages": [
+              2,
+              3
+            ],
+            "rules": [
+              "D3",
+              "C3"
+            ],
+            "severity": "major",
+            "point": "Index each club to the league average to remove market growth and inflation; raised once"
+          },
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C11"
+            ],
+            "severity": "major",
+            "point": "Lead is about growth: show CAGR % per club"
+          },
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C5"
+            ],
+            "severity": "minor",
+            "point": "City in colour, the rest grey"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P3"
+            ],
+            "severity": "major",
+            "point": "Slide title is a topic, not the lead"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P5"
+            ],
+            "severity": "minor",
+            "point": "Labels beside the lines; drop the legend"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P6"
+            ],
+            "severity": "minor",
+            "point": "Short axis labels (08/09)"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P4"
+            ],
+            "severity": "minor",
+            "point": "Gridlines"
+          }
+        ],
+        "mustNot": [
+          "Calling the chart good",
+          "A source finding (the source line is present)",
+          "A typo finding (none seeded)"
+        ],
+        "expectRoute": null
+      },
+      "chrisSays": "Most important are no conclusion and no league performance. All others less critical."
+    },
+    "C02": {
+      "file": "inputs/C02_man_city_two_panels.pdf",
+      "audience": "Board of a rival Premier League club. Decision: whether to raise a complaint that Man City's commercial revenue was out of line with its football record.",
+      "studentLead": "Man City's sponsorship deals were inflated: its commercial revenue ran far ahead of its football record from 2009/10 to 2017/18",
+      "stage1": {
+        "verdict": "revise",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L8",
+              "L1"
+            ],
+            "severity": "major",
+            "point": "'Deals were inflated' claims a motive the chart can't show; simplify to one statement"
+          }
+        ],
+        "mustNot": [
+          "A hard stop",
+          "L4 (no number is fine here)",
+          "Any comment on the two panels"
+        ]
+      },
+      "agreedLead": {
+        "text": "Man City's commercial revenue ran far ahead of its football record from 09/10 to 17/18",
+        "from": "chris",
+        "edited": "apostrophe added to Chris's 'Citys'"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C7",
+              "C9",
+              "C4"
+            ],
+            "severity": "major",
+            "point": "A relationship between two variables: one X-Y plot, points joined in time order, not two panels"
+          }
+        ],
+        "mustNot": [
+          "Saying the data or variables are wrong (index, 13 clubs, 10-season average are right)"
+        ],
+        "expectRoute": null
+      },
+      "chrisSays": "You are talking about a relationship between two variables. Always try an X-Y plot."
+    },
+    "C03": {
+      "file": "inputs/C03_kettle_crumb_formats.pptx",
+      "audience": "Head of leasing at the rail-station landlord: 14 of Kettle & Crumb's 22 transit kiosks, all renewing in 2027. Decision: how hard to push Kettle & Crumb on renewal terms.",
+      "studentLead": "Revenue growth 2023–26 by format: delivery kitchens fastest at 31% a year",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L6"
+            ],
+            "severity": "hardStop",
+            "point": "Wrong conclusion for the landlord: transit kiosks are the growing format Kettle & Crumb needs; make the lead relevant to the client"
+          }
+        ],
+        "mustNot": [
+          "L2 as a fault (Chris: the finding is clear)",
+          "Any comment on the stacked columns"
+        ],
+        "optional": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L3",
+              "L10"
+            ],
+            "severity": "minor",
+            "point": "Make it a sentence, most important part first"
+          }
+        ]
+      },
+      "agreedLead": {
+        "text": "Transit stations are driving attractive growth for K&C with 9% CAGR",
+        "from": "chris"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C10",
+              "C11"
+            ],
+            "severity": "major",
+            "point": "The 9% CAGR must jump out; CAGR % per format on the right"
+          },
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C2",
+              "C5"
+            ],
+            "severity": "minor",
+            "point": "Stacked columns bury the transit trend; emphasise transit stations"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P5",
+              "P4"
+            ],
+            "severity": "minor",
+            "point": "Drop the value axis, gridlines and legend; format labels left of the 2023 column"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P6"
+            ],
+            "severity": "minor",
+            "point": "Round to HK$m; no decimals on every label"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P3"
+            ],
+            "severity": "major",
+            "point": "Topic title; unit in the chart title; totals above the columns"
+          }
+        ],
+        "mustNot": [],
+        "expectRoute": null
+      },
+      "chrisSays": "Change lead to make relevant to client; then tidy up the chart."
+    },
+    "C04": {
+      "file": "inputs/C04_kestrel_revenue_pie.pptx",
+      "audience": "Group CEO, Kestrel Pacific Holdings (board, March 2026). Decision: how to split HK$2bn of capital across five businesses, 2026–30.",
+      "studentLead": "Health & beauty retail is our biggest business at 37% of revenue, so it should get the most of the HK$2bn",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L11"
+            ],
+            "severity": "hardStop",
+            "point": "Non-sequitur: being biggest by revenue doesn't justify the most capital"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L7"
+            ],
+            "severity": "hardStop",
+            "point": "Restates what the CEO already believes"
+          }
+        ],
+        "mustNot": [
+          "Any comment on the pie, 3D, legend or missing source ('no point putting lipstick on a pig')",
+          "whatWorks",
+          "offeredLead"
+        ]
+      },
+      "agreedLead": null,
+      "chartStages": null,
+      "chrisSays": "Too bad to save. Always do logic first. Detailed numbers to an appendix table; always seek a better chart than a pie."
+    },
+    "C05": {
+      "file": "inputs/C05_northfield_store_pl.pdf",
+      "audience": "VP Retail Operations, Northfield Footwear (12 US stores). Decision: which stores to close or remodel in 2027.",
+      "studentLead": "Store profitability varies widely across the network and rents are rising too fast",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L2",
+              "L7"
+            ],
+            "severity": "hardStop",
+            "point": "'Varies widely' is padding or motherhood: no conclusion. Hand it back and ask what they want to say"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L11"
+            ],
+            "severity": "hardStop",
+            "point": "No rent trend in the data: 'rents rising too fast' is unsupported (and too fast for what?)"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L1"
+            ],
+            "severity": "major",
+            "point": "Two messages"
+          }
+        ],
+        "mustNot": [
+          "Finding the conclusion for the student (e.g. naming the loss-making stores)",
+          "Any comment on the table's formatting"
+        ]
+      },
+      "agreedLead": null,
+      "pilotLead": {
+        "text": "Three of our 12 stores lose money after rent",
+        "from": "claude",
+        "why": "Stand-in so the pilot can test C1 at Stage 3; not Chris's"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C1"
+            ],
+            "severity": "hardStop",
+            "point": "A pasted table is not a chart: chart what proves the lead; the table goes to the appendix for Q&A"
+          }
+        ],
+        "mustNot": [],
+        "expectRoute": null
+      },
+      "chrisSays": "Push the whole chart back and redo the lead: what do they want to say?"
+    },
+    "C06": {
+      "file": "inputs/C06_lumen_sketch_photo.jpg",
+      "audience": "CEO, Lumen Optical (45 eyewear stores in Hong Kong). Decision: which of three profit programmes to fund first in 2026.",
+      "studentLead": "Three programmes lift EBIT by HK$35m to HK$90m by 2027, with pricing the biggest at HK$15m",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "D10"
+            ],
+            "severity": "hardStop",
+            "point": "The sum is wrong: 60 + 35 is not 90 (the net gain after inflation is 30)"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L6"
+            ],
+            "severity": "hardStop",
+            "point": "Focus on the decision: which programme to fund first"
+          }
+        ],
+        "mustNot": [
+          "Any comment on the typo, units or source in Stage 1"
+        ]
+      },
+      "agreedLead": null,
+      "pilotLead": {
+        "text": "Fund pricing first: it delivers HK$15m of the HK$35m programme gain by 2027",
+        "from": "claude",
+        "why": "Stand-in so the pilot can test Stages 3–4; not Chris's"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C5",
+              "C10"
+            ],
+            "severity": "any",
+            "point": "Highlight the pricing programme; the lead's numbers jump out"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P1"
+            ],
+            "severity": "major",
+            "point": "'Procurment' typo on the chart (major, not a hard stop)"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P2"
+            ],
+            "severity": "major",
+            "point": "Dummy chart: say where each bar's data will come from"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P7"
+            ],
+            "severity": "major",
+            "point": "No units (HK$m)"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P3"
+            ],
+            "severity": "major",
+            "point": "Topic title"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P11"
+            ],
+            "severity": "minor",
+            "point": "Mark it 'Illustrative data'"
+          }
+        ],
+        "mustNot": [
+          "P1 at hard-stop severity",
+          "A typo that isn't there"
+        ],
+        "expectRoute": null
+      },
+      "chrisSays": "Typos and wrong numbers in the lead are hard stops, major everywhere else."
+    },
+    "C07": {
+      "file": "inputs/C07_pearl_river_margin.pptx",
+      "audience": "CFO, Pearl River Packaging (Hong Kong-listed packaging maker). Decision: whether to push price increases in the 2026 customer contract round.",
+      "studentLead": "Our margin per tonne has halved since 2021, from HK$1,200 to HK$600: push price rises in the 2026 contract round",
+      "stage1": {
+        "verdict": "revise",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L9",
+              "L10",
+              "L1"
+            ],
+            "severity": "major",
+            "point": "Simplify"
+          }
+        ],
+        "mustNot": [
+          "L8 on the action (this chart alone supports it)",
+          "A hard stop",
+          "Any chart comment"
+        ]
+      },
+      "agreedLead": {
+        "text": "Push price rises in 2026 to recover margin",
+        "from": "chris"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              2,
+              3
+            ],
+            "rules": [
+              "D1",
+              "D6",
+              "C3",
+              "C10"
+            ],
+            "severity": "major",
+            "point": "Margin isn't on the chart: add margin per tonne as its own line, data labels rounded to 10. One finding, said once"
+          },
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C11"
+            ],
+            "severity": "minor",
+            "point": "Show CAGRs on the time series (minor: lead not about growth)"
+          }
+        ],
+        "mustNot": [
+          "The margin fault repeated in different words, or raised again in Stage 3 after Stage 2's fix was accepted"
+        ],
+        "expectRoute": null
+      },
+      "chrisSays": "One primary fault. No point repeating the main fault with small variations in language."
+    },
+    "C08": {
+      "file": "inputs/C08_aster_moss_dual_axis.png",
+      "audience": "CMO, Aster & Moss (Hong Kong skincare brand, online sales). Decision: whether to double the 2026 digital marketing budget.",
+      "studentLead": "Sales took off once marketing spend passed HK$2m a month, so doubling the budget will double sales",
+      "stage1": {
+        "verdict": "hardStop",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L11"
+            ],
+            "severity": "hardStop",
+            "point": "Causal claim and straight-line extrapolation from a correlation; demolish it and ask them to look at the data again"
+          }
+        ],
+        "mustNot": [
+          "Any comment on the dual axis in Stage 1",
+          "offeredLead"
+        ]
+      },
+      "agreedLead": {
+        "text": "Marketing spend has a weak correlation with sales",
+        "from": "chris"
+      },
+      "chartStages": {
+        "leadChanged": true,
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C7",
+              "C4"
+            ],
+            "severity": "major",
+            "point": "Relationship: one X-Y plot, points joined in time order; not a dual axis"
+          }
+        ],
+        "mustNot": [],
+        "expectRoute": "reupload",
+        "routeNote": "Stage 2 with leadChanged true and reuploadsLeft 1 should ask for a redrawn chart. The pilot then runs Stage 3 on the original with reuploadsLeft 0 to test the critique."
+      },
+      "chrisSays": "Causal claim demolished first. New lead on weak correlation, then a new chart, then critique."
+    },
+    "C09": {
+      "file": "inputs/C09_kaze_asean_growth.pdf",
+      "audience": "Head of International, Kaze Climate (Japanese air-conditioner maker). Decision: which ASEAN market to enter first in 2027.",
+      "studentLead": "Enter Vietnam first: its room air-conditioner market grows 9.8% a year to 2030, the fastest in ASEAN",
+      "stage1": {
+        "verdict": "revise",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L8"
+            ],
+            "severity": "major",
+            "point": "'Enter Vietnam first' needs more data (profitability, competitive position: a GE matrix); state the finding the chart supports"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L9",
+              "L10"
+            ],
+            "severity": "major",
+            "point": "Simplify"
+          }
+        ],
+        "mustNot": [
+          "A hard stop on the lead",
+          "Typos or source raised in Stage 1"
+        ]
+      },
+      "agreedLead": {
+        "text": "Vietnam is the fastest growing room A/C market in ASEAN, at 9.8% CAGR",
+        "from": "chris"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P2"
+            ],
+            "severity": "hardStop",
+            "point": "'Source: ChatGPT analysis' is a hard stop"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P1"
+            ],
+            "severity": "major",
+            "point": "Typos: 'ANUAL' in the subheading and 'Phillipines' on the axis"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P3"
+            ],
+            "severity": "major",
+            "point": "Unit, CAGR % and period under the title instead of '% a year'"
+          }
+        ],
+        "mustNot": [
+          "A hard stop or major in Stages 2–3 (Chris: data and chart pass)",
+          "whatWorks in Stage 4 (hard stop present)"
+        ],
+        "expectRoute": null
+      },
+      "chrisSays": "Strong chart; not enough on its own for an entry call. Typos obvious; ChatGPT source a hard stop."
+    },
+    "C10": {
+      "file": "inputs/C10_kestrel_portfolio_map.pptx",
+      "audience": "Group CEO, Kestrel Pacific Holdings (board, March 2026). Decision: how to split HK$2bn of capital across five businesses, 2026–30.",
+      "studentLead": "Put most of the HK$2bn into elderly care: our only business in an attractive market (4.6) where we are strong (4.7)",
+      "stage1": {
+        "verdict": "revise",
+        "mustCatch": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L8"
+            ],
+            "severity": "major",
+            "point": "'Most' and 'only' can't be supported yet"
+          },
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L4"
+            ],
+            "severity": "minor",
+            "point": "No artificial numbers (1–5 scores)"
+          }
+        ],
+        "mustNot": [
+          "A hard stop"
+        ]
+      },
+      "agreedLead": {
+        "text": "Kestrel should fully invest in elderly care as our most attractive business",
+        "from": "chris",
+        "edited": "'Kestral' spelling corrected"
+      },
+      "chartStages": {
+        "mustCatch": [
+          {
+            "stages": [
+              3
+            ],
+            "rules": [
+              "C12"
+            ],
+            "severity": "major",
+            "point": "GE matrix keeps market attractiveness vertical"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P3"
+            ],
+            "severity": "major",
+            "point": "Bubble size key in a legend, not the title"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P2"
+            ],
+            "severity": "major",
+            "point": "Source present but wrong: market attractiveness doesn't come from management accounts"
+          },
+          {
+            "stages": [
+              4
+            ],
+            "rules": [
+              "P13"
+            ],
+            "severity": "minor",
+            "point": "Label the dotted lines"
+          }
+        ],
+        "mustNot": [
+          "Rejecting the framework"
+        ],
+        "whatWorks": "Good choice of framework for the decision",
+        "expectRoute": null
+      },
+      "chrisSays": "Good choice of framework for the decision."
+    }
+  }
+}

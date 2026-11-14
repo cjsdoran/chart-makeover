@@ -1,0 +1,302 @@
+{
+  "about": "Chris Doran's calibration feedback, run 1 (14 Nov 2026), exported from the calibration page's database. Verbatim, typos included. Fault verdicts: agree = fault and severity right; sev = fault right, severity in note; no = not a fault. C06–C10 were marked without fault-by-fault verdicts. stages = Chris's rating of each later stage for the chart as uploaded.",
+  "feedback": {
+    "C01": {
+      "leadVerdict": "work",
+      "leadNote": "Lead is far too wordy. It describes facts, not drawing a conclusion. Should be punch first, qualifiiction/detail after",
+      "ownLead": "Man City had the fastest growing commercial revenue in the League",
+      "issues": "Need to include performance in the league. Need to adjust for inflation by indexing relative to average. Put labels next to lines, eliminate legend. Simplify axis to 08/09 format. Include CAGR calculation when you are talking about growth, humans cannot eyeball a line and determine CAGR%",
+      "mustNot": "That the chart is good",
+      "answer": "Most important are no conclusion and no league performance. All others less critical",
+      "stages": {
+        "data": "minor",
+        "chart": "stop",
+        "polish": "minor",
+        "fit": "minor"
+      },
+      "faults": {
+        "C01-1": {
+          "v": "sev",
+          "note": "Hard stop"
+        },
+        "C01-2": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C01-3": {
+          "v": "sev",
+          "note": "major"
+        },
+        "C01-4": {
+          "v": "sev",
+          "note": "major"
+        },
+        "C01-5": {
+          "v": "agree"
+        },
+        "C01-6": {
+          "v": "agree"
+        },
+        "C01-7": {
+          "v": "sev",
+          "note": "minor"
+        },
+        "C01-8": {
+          "v": "agree"
+        },
+        "C01-9": {
+          "v": "sev",
+          "note": "minor"
+        },
+        "C01-11": {
+          "v": "agree"
+        },
+        "C01-12": {
+          "v": "agree"
+        }
+      }
+    },
+    "C02": {
+      "leadVerdict": "work",
+      "leadNote": "Simplify to one statement.",
+      "ownLead": "Man Citys commercial revenue ran far ahead of its football record from 09/10 to 17/18",
+      "issues": "You are talking about a relationship between two variables. Always try an X-Y plot whenever you have this. Put these axes together, mapping time from point to point.",
+      "mustNot": "Wrong data/variables",
+      "answer": "Yes",
+      "stages": {
+        "data": "minor",
+        "chart": "stop",
+        "polish": "minor",
+        "fit": "minor"
+      },
+      "faults": {
+        "C02-1": {
+          "v": "agree"
+        },
+        "C02-2": {
+          "v": "sev",
+          "note": "minor"
+        },
+        "C02-3": {
+          "v": "no"
+        }
+      }
+    },
+    "C03": {
+      "leadVerdict": "work",
+      "leadNote": "Simplify - should be a sentence, with most important part first, then details and qualifications",
+      "ownLead": "Transit-stations are driving attractive growth for K&C with 9% CAGR",
+      "issues": "1) Change lead to make relevant to client\n2) Tidy up chart - eliminate axis, gridlines and legend, put format left of corresponding 2023 chunk, round revenue to HK$m, put unit in title, add total revenue, add CAGR % for each format on right; consider adding ranked bars on right hand side with ranked CAGR by format",
+      "mustNot": "",
+      "answer": "yes",
+      "stages": {
+        "data": "minor",
+        "chart": "pass",
+        "polish": "minor",
+        "fit": "minor"
+      },
+      "faults": {
+        "C03-1": {
+          "v": "no"
+        },
+        "C03-2": {
+          "v": "no",
+          "note": "Hard to get a full action so what from just this data"
+        },
+        "C03-3": {
+          "v": "sev",
+          "note": "hard stop - false conclusion - delivery kitchens are fastest growing"
+        },
+        "C03-4": {
+          "v": "sev",
+          "note": "minor"
+        },
+        "C03-5": {
+          "v": "sev",
+          "note": "minor"
+        },
+        "C03-6": {
+          "v": "agree"
+        },
+        "C03-7": {
+          "v": "agree"
+        },
+        "C03-8": {
+          "v": "agree"
+        },
+        "C03-9": {
+          "v": "agree"
+        }
+      }
+    },
+    "C04": {
+      "leadVerdict": "work",
+      "leadNote": "A terrible conclusion, without logic that reinforces our clients prejudice",
+      "ownLead": "Too bad to save",
+      "issues": "Cannot draw conclusion from just this data; needs more analysis\nPut all detailed numbers of each business in a table in the appendix for Q&A reference\nAlways seek a better chart than a pie chart",
+      "mustNot": "",
+      "answer": "Always do logic. Until logic fixed, no point giving feedback on the cosmetics \"No point putting lipstick on a pig\"",
+      "stages": {
+        "data": "stop",
+        "chart": "stop",
+        "polish": "stop",
+        "fit": "stop"
+      },
+      "faults": {
+        "C04-1": {
+          "v": "agree"
+        },
+        "C04-2": {
+          "v": "agree"
+        },
+        "C04-3": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C04-4": {
+          "v": "agree"
+        },
+        "C04-5": {
+          "v": "agree",
+          "note": "And looks unprofessional"
+        },
+        "C04-6": {
+          "v": "agree"
+        },
+        "C04-7": {
+          "v": "agree"
+        },
+        "C04-8": {
+          "v": "sev",
+          "note": "major"
+        }
+      }
+    },
+    "C05": {
+      "leadVerdict": "work",
+      "leadNote": "Store profit variability is just \"padding\" or \"motherhood\" - what you say when you have no conclusion. Reanalyse the data to find the pattern. Equally, rents rising too fast - for what?",
+      "ownLead": "",
+      "issues": "Never presenta table like this to your client. At best, it is an appendix page, for reference in Q&A. It is lazy cut and paste from Excel. There is no visual focus to follow the lead, it will take a client 5 minutes to figure everything out",
+      "mustNot": "",
+      "answer": "No, push the whole chart back and redo lead - what do they want to say?",
+      "stages": {
+        "data": "stop",
+        "chart": "stop",
+        "polish": "stop",
+        "fit": "stop"
+      },
+      "faults": {
+        "C05-1": {
+          "v": "agree"
+        },
+        "C05-2": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C05-3": {
+          "v": "agree"
+        },
+        "C05-4": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C05-5": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C05-6": {
+          "v": "sev",
+          "note": "hard stop"
+        },
+        "C05-7": {
+          "v": "agree"
+        },
+        "C05-8": {
+          "v": "agree"
+        },
+        "C05-9": {
+          "v": "agree"
+        },
+        "C05-10": {
+          "v": "agree"
+        },
+        "C05-11": {
+          "v": "agree"
+        },
+        "C05-12": {
+          "v": "agree"
+        }
+      }
+    },
+    "C06": {
+      "leadVerdict": "work",
+      "leadNote": "Focus on the decision - which to fund first. Also the maths is not right, the EBIT is lifted to $90m",
+      "ownLead": "",
+      "issues": "Highlight pricing programme\nAdd sources\nAdd units\nTypos - Procurement",
+      "mustNot": "",
+      "answer": "Yes - typos and numbers wrong in the lead are hard stops, major everywhere else",
+      "stages": {
+        "data": "pass",
+        "chart": "pass",
+        "polish": "major",
+        "fit": "major"
+      },
+      "faults": {}
+    },
+    "C07": {
+      "leadVerdict": "",
+      "leadNote": "Simplify",
+      "ownLead": "Push price rises in 2026 to recover margin",
+      "issues": "The lead and so what are about margin, but this is not on the chart. Include it - as a separate line with data labels rounded to 10\nShow CAGRs on time series charts",
+      "mustNot": "",
+      "answer": "One primary fault. No point repeating the main fault with small variations in language",
+      "stages": {
+        "data": "major",
+        "chart": "major",
+        "polish": "minor",
+        "fit": "minor"
+      },
+      "faults": {}
+    },
+    "C08": {
+      "leadVerdict": "work",
+      "leadNote": "Terrible lead - not enough data to support this conclusion\nLook at the data - is there a strong correlation between sales and spend?",
+      "ownLead": "Marketing spend has a weak correlation with sales",
+      "issues": "Our lead is about the relationship between marketing spend and sales. Try XY plot for a relationship, like the Man City chart. Impossible for humans to eyeball a chart and see if there is or isnt a relationship\nDual axis charts usually are not the best choice",
+      "mustNot": "",
+      "answer": "Causal claim demolished first. They should relook at the data and write a new lead on weak correlation. Then draw a new chart for the new lead. Then Danial can critique the chart",
+      "stages": {
+        "data": "minor",
+        "chart": "stop",
+        "polish": "minor",
+        "fit": "major"
+      },
+      "faults": {}
+    },
+    "C09": {
+      "leadVerdict": "",
+      "leadNote": "Enter vietnam first is the so what conclusion we are building towards - it is not enough data to support it yet. Simplify the lead",
+      "ownLead": "Vietnam is the fastest growing room A/C market in ASEAN, at 9.8% CAGR",
+      "issues": "anNual growth typo is obvious\n% a year label not needed. Instead put unit - $ or units, CAGR% and time under the ROOM A/C DEMAND title\nChartGPT source is a hard stop",
+      "mustNot": "",
+      "answer": "As my feedback - not enough on its own. suggest adding more data - eg profitability to support conclusion on market attractiveness, combine with competitive position to get GE matrix entry conclusion",
+      "stages": {
+        "data": "pass",
+        "chart": "pass",
+        "polish": "stop",
+        "fit": "pass"
+      },
+      "faults": {}
+    },
+    "C10": {
+      "leadVerdict": "",
+      "leadNote": "Cant support conclusion on \"most \" yet. \nDont use numbers where they are artificial",
+      "ownLead": "Kestral should fully invest in Elderly care as our most attractive business",
+      "issues": "Bubble area = $xm revenue should be a legend, not in title.\nSource  - doesnt come from management accounts.\nGE Matrix always has market attractiveness vertical - changing it will confuse people\nMark the dotted lines",
+      "mustNot": "",
+      "answer": "Good choice of framework for the decision",
+      "stages": {},
+      "faults": {}
+    }
+  }
+}

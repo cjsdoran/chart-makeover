@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "read-chart.json",
+  "title": "Chart reading",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "readable",
+    "unreadableReason",
+    "kind",
+    "texts",
+    "chart",
+    "table",
+    "emphasis",
+    "smallestTextPt",
+    "valuesSource",
+    "uncertain",
+    "summary"
+  ],
+  "properties": {
+    "readable": {
+      "type": "boolean"
+    },
+    "unreadableReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Null when readable. Otherwise 'several charts', 'not a chart', or what to fix in the photo."
+    },
+    "kind": {
+      "enum": [
+        "data",
+        "table",
+        "concept",
+        "text"
+      ]
+    },
+    "texts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "subheading",
+        "chartTitle",
+        "source",
+        "illustrativeLabel",
+        "other"
+      ],
+      "properties": {
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subheading": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chartTitle": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Verbatim source line, or null if none"
+        },
+        "illustrativeLabel": {
+          "type": "boolean"
+        },
+        "other": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "text",
+              "where"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "where": {
+                "type": "string"
+              },
+              "pt": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          },
+          "description": "Every other text verbatim: axis titles, tick labels, legend, data labels, annotations, footnotes"
+        }
+      }
+    },
+    "chart": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "orientation",
+        "stacking",
+        "is3D",
+        "dualAxis",
+        "panels",
+        "logScale",
+        "logLabelled",
+        "sorted",
+        "categories",
+        "series",
+        "axes",
+        "referenceLines",
+        "annotations",
+        "gridlines",
+        "legend",
+        "dataLabels"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "line",
+            "column",
+            "bar",
+            "stackedColumn",
+            "stackedBar",
+            "stacked100",
+            "pie",
+            "doughnut",
+            "scatter",
+            "bubble",
+            "waterfall",
+            "area",
+            "combo",
+            "matrix",
+            "other"
+          ]
+        },
+        "orientation": {
+          "enum": [
+            "vertical",
+            "horizontal",
+            "n/a"
+          ]
+        },
+        "stacking": {
+          "enum": [
+            "none",
+            "stacked",
+            "percent"
+          ]
+        },
+        "is3D": {
+          "type": "boolean"
+        },
+        "dualAxis": {
+          "type": "boolean"
+        },
+        "panels": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "logScale": {
+          "type": "boolean"
+        },
+        "logLabelled": {
+          "type": "boolean"
+        },
+        "sorted": {
+          "enum": [
+            "ascending",
+            "descending",
+            "none",
+            "n/a"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "colour",
+              "values",
+              "labelledDirectly",
+              "axis"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "colour": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Hex like 033D93 or a colour word"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "properties": {
+                    "x": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "y": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "size": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "label": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              },
+              "labelledDirectly": {
+                "type": "boolean"
+              },
+              "axis": {
+                "enum": [
+                  "primary",
+                  "secondary"
+                ]
+              }
+            }
+          }
+        },
+        "axes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "axis",
+              "title",
+              "unit",
+              "min",
+              "max",
+              "shown"
+            ],
+            "properties": {
+              "axis": {
+                "enum": [
+                  "x",
+                  "y",
+                  "y2"
+                ]
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "min": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "max": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "shown": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "referenceLines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "axis",
+              "value",
+              "label"
+            ],
+            "properties": {
+              "axis": {
+                "enum": [
+                  "x",
+                  "y"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gridlines": {
+          "type": "boolean"
+        },
+        "legend": {
+          "type": "boolean"
+        },
+        "dataLabels": {
+          "enum": [
+            "none",
+            "some",
+            "all"
+          ]
+        }
+      }
+    },
+    "table": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "headers",
+        "rows",
+        "highlighted"
+      ],
+      "properties": {
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "highlighted": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "emphasis": {
+      "type": "string"
+    },
+    "smallestTextPt": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "valuesSource": {
+      "enum": [
+        "file",
+        "labels",
+        "estimated",
+        "none"
+      ]
+    },
+    "uncertain": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Words or values the reader is not sure of (photos)"
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "^I read this as "
+    }
+  }
+}

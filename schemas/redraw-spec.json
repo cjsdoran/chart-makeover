@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "redraw-spec.json",
+  "title": "Redraw specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "redrawable",
+    "reason",
+    "title",
+    "subheading",
+    "chart",
+    "table",
+    "leadNumbers",
+    "annotations",
+    "referenceLines",
+    "source",
+    "notes"
+  ],
+  "properties": {
+    "redrawable": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "description": "The agreed lead, verbatim"
+    },
+    "subheading": {
+      "type": "string",
+      "description": "ALL CAPS: what, unit, period, CAGR where relevant"
+    },
+    "chart": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "categories",
+        "series",
+        "valueAxis",
+        "categoryAxis",
+        "dataLabels",
+        "numberFormat",
+        "sort",
+        "joinInTimeOrder",
+        "quadrants"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "line",
+            "column",
+            "bar",
+            "stackedColumn",
+            "stacked100",
+            "waterfall",
+            "scatter",
+            "bubble"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "role",
+              "points",
+              "illustrative",
+              "cagr"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "enum": [
+                  "subject",
+                  "comparison",
+                  "other"
+                ]
+              },
+              "points": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "properties": {
+                    "x": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "y": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "size": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "label": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              },
+              "illustrative": {
+                "type": "boolean",
+                "description": "True when invented to show the lead"
+              },
+              "cagr": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "e.g. '9.8%' for the period, time series only"
+              }
+            }
+          }
+        },
+        "valueAxis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "min",
+            "max",
+            "log",
+            "shown"
+          ],
+          "properties": {
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "max": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "log": {
+              "type": "boolean"
+            },
+            "shown": {
+              "type": "boolean"
+            }
+          }
+        },
+        "categoryAxis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "min",
+            "max",
+            "shown"
+          ],
+          "properties": {
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "max": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "shown": {
+              "type": "boolean"
+            }
+          }
+        },
+        "dataLabels": {
+          "enum": [
+            "none",
+            "subject",
+            "all",
+            "totals"
+          ]
+        },
+        "numberFormat": {
+          "type": "string",
+          "description": "Excel-style format, e.g. 0, 0.0, 0%"
+        },
+        "sort": {
+          "enum": [
+            "ascending",
+            "descending",
+            "none"
+          ]
+        },
+        "joinInTimeOrder": {
+          "type": "boolean",
+          "description": "Scatter only"
+        },
+        "quadrants": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "xSplit",
+            "ySplit",
+            "xLabel",
+            "yLabel"
+          ],
+          "properties": {
+            "xSplit": {
+              "type": "number"
+            },
+            "ySplit": {
+              "type": "number"
+            },
+            "xLabel": {
+              "type": "string"
+            },
+            "yLabel": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "table": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "headers",
+        "rows",
+        "highlightColumn"
+      ],
+      "properties": {
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "highlightColumn": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "leadNumbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "anchor"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "series",
+              "x"
+            ],
+            "properties": {
+              "series": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "x": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "anchor"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "series",
+              "x"
+            ],
+            "properties": {
+              "series": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "x": {
+                "type": [
+                  "string",
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "referenceLines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "axis",
+          "value",
+          "label"
+        ],
+        "properties": {
+          "axis": {
+            "enum": [
+              "x",
+              "y"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^Source: "
+    },
+    "notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agreedLead",
+        "acceptedFixes",
+        "declinedFixes",
+        "dataToSource"
+      ],
+      "properties": {
+        "agreedLead": {
+          "type": "string"
+        },
+        "acceptedFixes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "declinedFixes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "fix",
+              "reason"
+            ],
+            "properties": {
+              "fix": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "dataToSource": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

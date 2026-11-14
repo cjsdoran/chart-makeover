@@ -1,0 +1,135 @@
+{
+  "about": "Read-test truth for milestone 2. Every mustRead string must appear verbatim (typos included) somewhere in the reading's texts. keyValues within ±5% (photos ±10%). kind and chartType must match (C06 may read as column with a waterfall shape; accept 'waterfall' or 'column'). Built from the test-set build scripts, so these are exact.",
+  "cases": {
+    "C01": {
+      "kind": "data",
+      "chartType": "line",
+      "flags": {
+        "gridlines": true,
+        "legend": true
+      },
+      "mustRead": [
+        "Commercial revenue of the Big Five, 2008/09–2024/25",
+        "Commercial revenue (£m)",
+        "Source: Deloitte Football Money League; club annual reports"
+      ],
+      "seriesCount": 5,
+      "valuesSource": "file"
+    },
+    "C02": {
+      "kind": "data",
+      "chartType": "line",
+      "flags": {
+        "panels": 2,
+        "logScale": true
+      },
+      "mustRead": [
+        "Man City's sponsorship deals were inflated",
+        "Source: Deloitte Football Money League; club annual reports; Fjelstul English Football Database"
+      ],
+      "note": "Two aligned panels count as one chart: readable true"
+    },
+    "C03": {
+      "kind": "data",
+      "chartType": "stackedColumn",
+      "flags": {
+        "legend": true,
+        "gridlines": true
+      },
+      "mustRead": [
+        "Source: Kettle & Crumb management accounts, 2023–26"
+      ],
+      "valuesSource": "file"
+    },
+    "C04": {
+      "kind": "data",
+      "chartType": "pie",
+      "flags": {
+        "is3D": true,
+        "legend": true
+      },
+      "mustRead": [
+        "Revenue mix 2025",
+        "Kestrel Pacific revenue by business, 2025 (HK$m)"
+      ],
+      "source": null,
+      "valuesSource": "file"
+    },
+    "C05": {
+      "kind": "table",
+      "mustRead": [
+        "FY25 Store P&L",
+        "Source: Northfield Footwear finance, FY25 store P&L (unaudited)",
+        "Contrib. $ (adj.)"
+      ],
+      "smallestTextPtMax": 10
+    },
+    "C06": {
+      "kind": "data",
+      "chartType": "waterfall",
+      "mustRead": [
+        "Procurment",
+        "EBIT bridge 2025 - 2027"
+      ],
+      "keyValues": {
+        "EBIT 2025": 60,
+        "Pricing": 15,
+        "Procurment": 12,
+        "Store labour": 8,
+        "Cost inflation": -5,
+        "EBIT 2027 target": 90
+      },
+      "source": null,
+      "note": "Hand-drawn photo: 'Procurment' must be transcribed with the typo; may be listed in uncertain"
+    },
+    "C07": {
+      "kind": "data",
+      "chartType": "line",
+      "mustRead": [
+        "Source: Pearl River Packaging finance, 2019–25 annual accounts"
+      ],
+      "valuesSource": "file"
+    },
+    "C08": {
+      "kind": "data",
+      "chartType": "combo",
+      "flags": {
+        "dualAxis": true,
+        "gridlines": true,
+        "legend": true
+      },
+      "mustRead": [
+        "Marketing Spend vs Online Sales",
+        "Source: Shopify export; marketing ledger",
+        "Marketing spend (HK$m)",
+        "Online sales (HK$m)"
+      ]
+    },
+    "C09": {
+      "kind": "data",
+      "chartType": "bar",
+      "mustRead": [
+        "ROOM AIR-CONDITIONER DEMAND, ANUAL GROWTH 2025–30",
+        "Source: ChatGPT analysis, October 2026",
+        "Phillipines"
+      ],
+      "keyValues": {
+        "Malaysia": 3.1,
+        "Thailand": 4.2,
+        "Indonesia": 7.4,
+        "Phillipines": 8.1,
+        "Vietnam": 9.8
+      }
+    },
+    "C10": {
+      "kind": "data",
+      "chartType": "bubble",
+      "mustRead": [
+        "Source: Kestrel Pacific management accounts 2025; team analysis (scores 1–5)",
+        "Market attractiveness (score 1–5): low → high",
+        "Competitive position (score 1–5): low → high"
+      ],
+      "valuesSource": "file"
+    }
+  }
+}
