@@ -137,8 +137,11 @@ export async function drivePath(start, student, review, { stopAfterStage2Route =
 
 // ---------- the judge ----------
 
-const hits = (calls, rules, stages) => calls.filter((c) => c.result.ok && (!stages || stages.includes(c.stage)))
-  .flatMap((c) => c.result.data.findings.filter((f) => f.rules.some((r) => rules.includes(r))).map((f) => ({ ...f, stage: c.stage })));
+// A finding counts when it cites one of the rules, or (mustCatch `textMatch`, D66) when its issue or
+// fix says the point in words under another rule.
+const hits = (calls, rules, stages, textMatch) => calls.filter((c) => c.result.ok && (!stages || stages.includes(c.stage)))
+  .flatMap((c) => c.result.data.findings.filter((f) => f.rules.some((r) => rules.includes(r))
+    || (textMatch && new RegExp(textMatch, 'i').test(`${f.issue} ${f.fix}`))).map((f) => ({ ...f, stage: c.stage })));
 const describe = (fs) => (fs.length ? `found ${fs.map((f) => `S${f.stage} ${f.rules.join('/')} ${f.severity}`).join('; ')}` : 'not raised');
 
 /**
@@ -150,13 +153,14 @@ export function judgeChartStages(exp, calls, global) {
   const checks = [];
   const add = (check, okay, detail = '') => checks.push({ check, ok: okay, detail });
   for (const m of exp.mustCatch ?? []) {
-    const inStage = hits(calls, m.rules, m.stages);
+    const inStage = hits(calls, m.rules, m.stages, m.textMatch);
     const atSeverity = inStage.filter((f) => m.severity === 'any' || f.severity === m.severity);
-    const grouped = inStage.filter((f) => !atSeverity.includes(f) && f.rules.length > 1 && SEVERITY_RANK[f.severity] < SEVERITY_RANK[m.severity]);
+    // Grouped into a more severe finding: by its rules, or said in words under another rule (textMatch).
+    const grouped = inStage.filter((f) => !atSeverity.includes(f) && (f.rules.length > 1 || !f.rules.some((r) => m.rules.includes(r))) && SEVERITY_RANK[f.severity] < SEVERITY_RANK[m.severity]);
     const elsewhere = hits(calls, m.rules).filter((f) => !m.stages.includes(f.stage));
     const detail = `${describe(inStage)}${elsewhere.length ? `; also ${describe(elsewhere).replace('found ', '')} outside Stage ${m.stages.join('/')}` : ''}${!atSeverity.length && grouped.length ? ' (grouped into a more severe finding: for Chris)' : ''}`;
     add(`mustCatch S${m.stages.join('/')} ${m.rules.join('/')} (${m.severity})`, atSeverity.length > 0 || grouped.length > 0, detail);
-    if (m.stages.length > 1) add(`raised once: ${m.rules.join('/')}`, hits(calls, m.rules, m.stages).length <= 1, describe(hits(calls, m.rules, m.stages)));
+    if (m.stages.length > 1) add(`raised once: ${m.rules.join('/')}`, inStage.length <= 1, describe(inStage));
   }
   for (const m of exp.optional ?? []) {
     checks.push({ check: `optional S${m.stages.join('/')} ${m.rules.join('/')} (${m.severity})`, ok: null, detail: describe(hits(calls, m.rules, m.stages)) });

@@ -82,3 +82,14 @@ describe('P-2 driver', () => {
     expect(judgeChartStages({ mustCatch: [], expectRoute: 'reupload' }, [{ stage: 2, round: 1, result: reply(2, [], { route: 'reupload' }) }], []).ok).toBe(true);
   });
 });
+
+describe('P-2 judge: textMatch (D66)', () => {
+  it('counts a point said in words under another rule, as grouped, and only when the words match', () => {
+    const exp = { mustCatch: [{ stages: [3, 4], rules: ['P13'], severity: 'minor', textMatch: 'dividers?.{0,120}label' }], expectRoute: null };
+    const said = [{ stage: 3, round: 1, result: reply(3, [{ rules: ['C12'], severity: 'major', fix: 'Rebuild the dividers at 3.0 and label each one.' }]) }];
+    const j = judgeChartStages(exp, said, []);
+    expect(j.checks.find((c) => c.check.startsWith('mustCatch')).ok).toBe(true);
+    const silent = [{ stage: 3, round: 1, result: reply(3, [{ rules: ['C12'], severity: 'major', fix: 'Swap the axes.' }]) }];
+    expect(judgeChartStages(exp, silent, []).checks.find((c) => c.check.startsWith('mustCatch')).ok).toBe(false);
+  });
+});

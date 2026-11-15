@@ -813,13 +813,16 @@
           },
           {
             "stages": [
+              3,
               4
             ],
             "rules": [
               "P13"
             ],
+            "textMatch": "label (each|the|both)( [a-z]+)? (divider|line)s?|dividers?.{0,120}label",
             "severity": "minor",
-            "point": "Label the dotted lines"
+            "point": "Label the dotted lines",
+            "note": "Chris, 16 Nov 2026: it counts when Stage 3 raises it (e.g. grouped with C12, the fix labelling the dividers); check the fix says so (D66)"
           }
         ],
         "mustNot": [
