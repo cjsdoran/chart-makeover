@@ -1,7 +1,7 @@
 // The model-call cores (spec §7): what each function sends and how it reads the reply. The
 // functions use `finish`; the read test and the pilot harness call `read` in-process.
 import { stageSystemPrompt, taskSystemPrompt } from './prompts.mjs';
-import { checkReview } from '../../shared/reviewCheck.js';
+import { checkReview, floorSeverity } from '../../shared/reviewCheck.js';
 import { checkSchema, parseModelJson, schemaText } from '../../shared/schemaCheck.js';
 import { config } from '../../shared/limits.js';
 
@@ -125,6 +125,12 @@ export function fillReview(data) {
   const out = { ...data };
   for (const [k, v] of Object.entries({ findings: [], declineResponses: [], whatWorks: null, offeredLead: null, route: null, reopenStage: null, impression: null })) {
     if (out[k] === undefined || (Array.isArray(v) && out[k] === null)) out[k] = v;
+  }
+  // A finding without its severity takes the level its rules require (D56), rather than costing a
+  // regeneration: the review check would set the same floor anyway.
+  if (Array.isArray(out.findings)) {
+    out.findings = out.findings.map((f) => (f && typeof f === 'object' && f.severity === undefined && floorSeverity(f.rules)
+      ? { ...f, severity: floorSeverity(f.rules) } : f));
   }
   return out;
 }

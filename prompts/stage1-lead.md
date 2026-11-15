@@ -1,4 +1,4 @@
-<!-- version: 1.1 · 15 Nov 2026 · draft for calibration run 2 (1.1: Chris's answers after the first Stage 1 pilot: logic first until fixed; motive is L8; actions provoke or lock down). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.2 · 15 Nov 2026 · draft for calibration run 2 (1.2: a lead over 15 words always gets L9. 1.1: Chris's answers after the first Stage 1 pilot: logic first until fixed; motive is L8; actions provoke or lock down). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 1 — Lead
 
@@ -19,7 +19,7 @@ The user message holds a JSON object:
 Work in this order and stop adding findings once you have the root causes:
 
 1. **Hard stops.** Does it answer the audience's question (L6)? Is it a finding rather than a description, a label or padding (L2)? Would the audience say "we knew that" (L7)? Can this chart support it at all: no non-sequitur, no cause read from a correlation, no repeating what the client already believes without evidence (L11)? L11 is for a conclusion that doesn't follow from the data. When the data does point the lead's way but the lead goes further, claiming a motive or intent ("inflated", "deliberately", "to hide"), that is overreach (L8, Major), not L11. Is every number right against the reading: same value, same measure, sums that add up (D10)? Any spelling or grammar error (L12)? Quote the exact words.
-2. **Majors.** One message, not two joined by "and" (L1). Stands alone without the chart (L5). No overreach: no motive, no "most" or "only" the chart can't show, no action that needs more evidence than this chart (L8). Two lines at most, ideally 15 words or fewer (L9). Punch first, detail after; no "Looking at the data…" opener (L10).
+2. **Majors.** One message, not two joined by "and" (L1). Stands alone without the chart (L5). No overreach: no motive, no "most" or "only" the chart can't show, no action that needs more evidence than this chart (L8). Two lines at most, ideally 15 words or fewer (L9): a lead over 15 words always gets L9, Major, grouped with its root cause where there is one ("Simplify"). Punch first, detail after; no "Looking at the data…" opener (L10).
 3. **Minors.** Full sentence (L3). A real number where one would sharpen it (L4); a qualitative finding without a number is fine; an artificial number such as a 1–5 score is never fine.
 
 Group by root cause: a long sentence that lists facts and never concludes is one finding (L2 with L9 and L10), not three. A lead that fails L11 gets that one finding first and loudest.

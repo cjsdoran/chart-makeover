@@ -185,6 +185,15 @@ describe('T-REV-3: regenerate what code can’t fix (spec §7.1)', () => {
     expect(check(rev({ round: 3, message: 'Try “City is the fastest growing club in the League” instead.' }), r3).ok).toBe(true);
   });
 
+  it('a lead over 15 words without L9 (D55), unless the logic is broken', () => {
+    const long = { stage: 1, round: 1, input: input1({ lead: 'Our margin per tonne has halved since 2021, from HK$1,200 to HK$600: push price rises in the 2026 contract round' }) };
+    const l8 = finding({ rules: ['L8'], severity: 'major' });
+    expect(check(rev({ verdict: 'revise', findings: [l8] }), long).errors).toEqual([REGENERATE.leadTooLong(20)]);
+    expect(check(rev({ verdict: 'revise', findings: [{ ...l8, rules: ['L8', 'L9'] }] }), long).ok).toBe(true);
+    expect(check(rev({ findings: [finding({ rules: ['L11'] })] }), long).ok).toBe(true);
+    expect(check(rev(), { stage: 1, round: 1, input: input1({ lead: 'Man City had the fastest growing commercial revenue in the League' }) }).ok).toBe(true);
+  });
+
   it('verdictOf', () => {
     expect(verdictOf([{ severity: 'minor' }])).toBe('pass');
   });
@@ -215,6 +224,20 @@ describe('T-REV-4: the function', () => {
     expect(r.attempts).toBe(2);
     const second = (client.beta.calls[1] ?? client.calls[1]).messages[0].content;
     expect(second).toContain(`<previous_errors>\n- ${REGENERATE.score}\n</previous_errors>`);
+  });
+
+  it('a finding without its severity takes the level its rules require (D56), with no regeneration', async () => {
+    const { severity, ...noSeverity } = finding({ rules: ['L1', 'L6'] });
+    reply(rev({ findings: [noSeverity] }));
+    const ev = await final(body1());
+    expect(ev.type).toBe('result');
+    expect(ev.data.findings[0].severity).toBe('hardStop');
+  });
+
+  it('score words are fine when the chart itself uses them (a 1–5 score axis, C10)', () => {
+    const req = { stage: 1, round: 1, input: input1({ lead: 'Put most of the HK$2bn into elderly care: attractive (4.6), strong (4.7)', reading: { texts: { other: ['Market attractiveness (score 1–5)'] } } }) };
+    const r = checkReview(fillReview(rev({ verdict: 'revise', findings: [finding({ rules: ['L8', 'L9'], severity: 'major' })], message: 'A 1–5 score is an artificial number.' })), req);
+    expect(r.ok).toBe(true);
   });
 
   it('omitted empty fields are filled before the schema', async () => {

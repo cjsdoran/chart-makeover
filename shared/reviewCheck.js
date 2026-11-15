@@ -14,11 +14,23 @@ export const REGENERATE = {
   tooMany: 'Raise at most three hard-stop or major findings; group them by root cause.',
   tooLong: (n) => `Your message is ${n} words. Keep it to about ${caps.messageWords} words, and never more than ${caps.messageWordsMax}.`,
   score: 'Never give a score, grade or rating.',
+  leadTooLong: (n) => `The lead is ${n} words, over ${caps.leadWordsMax}: raise L9 (Major), grouped with its root cause where there is one.`,
   leadRewrite: "Don't write the lead for the student before round 3: say what the lead must do, and ask one question.",
   declineMissing: (ids) => `Answer every declined fix in declineResponses (accept or pushBack): missing ${ids.join(', ')}.`,
 };
 
 export const wordCount = (text) => (text.match(/[A-Za-z0-9£$€%][^\s]*/g) ?? []).length;
+
+/**
+ * The severity a finding with these rules must have at least: the strictest of its rules' lowest
+ * allowed values (D50). Used to fill a severity the model left out (D56). Null for unknown rules.
+ */
+export function floorSeverity(ruleIds) {
+  const known = (Array.isArray(ruleIds) ? ruleIds : []).filter((id) => RULES[id]);
+  if (!known.length) return null;
+  return known.map((id) => RULES[id].allowed.slice().sort((a, b) => ORDER.indexOf(b) - ORDER.indexOf(a))[0])
+    .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))[0];
+}
 
 /** The verdict from the severities (D10). */
 export function verdictOf(findings) {
@@ -63,8 +75,7 @@ export function checkReview(review, { stage, round, input = {} }) {
     // A finding is at least as severe as the strictest rule it cites requires (L6 grouped with L1 is
     // a hard stop), and at most the most severe value any of its rules allows.
     const allowed = [...new Set(rules.flatMap((id) => RULES[id].allowed))];
-    const floor = rules.map((id) => RULES[id].allowed.slice().sort((a, b) => ORDER.indexOf(b) - ORDER.indexOf(a))[0])
-      .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))[0];
+    const floor = floorSeverity(rules);
     let severity = f.severity;
     if (ORDER.indexOf(severity) > ORDER.indexOf(floor)) {
       severity = floor;
@@ -129,10 +140,20 @@ export function checkReview(review, { stage, round, input = {} }) {
   if (data.findings.filter((f) => BLOCKING.has(f.severity)).length > caps.issuesShown) errors.push(REGENERATE.tooMany);
   const words = wordCount(data.message);
   if (words > caps.messageWordsMax) errors.push(REGENERATE.tooLong(words));
-  const studentText = `${input.lead ?? ''} ${input.audience ?? ''}`;
+  // The student's own words and the chart's (a 1–5 score axis, C10) may use these words; Daniel may too.
+  const studentText = `${input.lead ?? ''} ${input.audience ?? ''} ${input.reading ? JSON.stringify(input.reading) : ''}`;
   if (SCORE.test(data.message) || (SCORE_WORDS.test(data.message) && !SCORE_WORDS.test(studentText))) errors.push(REGENERATE.score);
   const missing = declined.filter((id) => !data.declineResponses.some((r) => r.findingId === id));
   if (missing.length) errors.push(REGENERATE.declineMissing(missing));
+  // Chris, 15 Nov 2026 (D55): a lead over 15 words always gets L9, unless the logic is broken
+  // (logic first: nothing else until a new lead fixes L11).
+  if (stage === 1 && input.lead) {
+    const leadWords = wordCount(input.lead);
+    const logicBroken = data.findings.some((f) => f.rules.includes('L11'));
+    if (leadWords > caps.leadWordsMax && !logicBroken && !data.findings.some((f) => f.rules.includes('L9'))) {
+      errors.push(REGENERATE.leadTooLong(leadWords));
+    }
+  }
   if (stage === 1 && round < caps.offerAtRound) {
     const own = normalise(`${input.lead ?? ''} ${(input.history ?? []).map((h) => h.lead ?? '').join(' ')}`);
     if (quotedPassages(data.message).some((q) => !own.includes(normalise(q)))) errors.push(REGENERATE.leadRewrite);

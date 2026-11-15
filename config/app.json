@@ -70,6 +70,7 @@
     "fitReopens": 1,
     "reuploads": 1,
     "pushBacksPerFinding": 1,
+    "leadWordsMax": 15,
     "messageWords": 120,
     "issuesShown": 3,
     "messageWordsMax": 150,
