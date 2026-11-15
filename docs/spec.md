@@ -2,7 +2,7 @@
 
 Derived from "PRD — Chart Makeover" rev 58 (`docs/prd.md`, 14 Nov 2026), the build brief (`BUILD_BRIEF.md`), and the specs of Tree Surgery (TS D1–D27) and Question Time (QT D1–D24), whose code this app reuses. Requirement IDs CM-1 to CM-12 match the PRD; CMS-n IDs are added by this spec. Decisions are in §14, questions for Chris in §15.
 
-**Status:** milestones 1–3 built, 15 Nov 2026 (scaffold, intake and reading, D33–D40; chat shell and stage engine on canned reviews, D41–D48; Stage 1 live with the review check, D49–D53). RT-1 passed 10/10 with read prompt 1.1; P-1 (Stage 1) 9 of 10 with stage prompt 1.2 (D54–D57), every case on its first attempt; C02's L4 still open with Chris. Chris's answers to §15 (D27–D32) are not in this file yet; the build follows the proposed defaults in §15 until they are.
+**Status:** milestones 1–3 built, 15 Nov 2026 (scaffold, intake and reading, D33–D40; chat shell and stage engine on canned reviews, D41–D48; Stage 1 live with the review check, D49–D53). RT-1 passed 10/10 with read prompt 1.1; P-1 (Stage 1) 10 of 10 with stage prompt 1.2 (D54–D58), every case on its first attempt. Chris's answers to §15 (D27–D32) are not in this file yet; the build follows the proposed defaults in §15 until they are.
 
 **Base code.** Tree Surgery is the newer sibling and already has what this app needs most: PDF page rendering with the text layer, .pptx slide reading (groups flattened, pictures), NDJSON responses with keep-alive pings, stage cores shared by the functions and the pilot, the read test and the pilot harness. Copy from `../Tree Surgery App` first, and from `../Question Time App` only where Tree Surgery doesn't have it (D3).
 
@@ -358,6 +358,7 @@ Never prompt text. File name `MGMT5760_<Case>_ChartMakeover_<StudentID>_<Attempt
 | D55 | **Chris, 15 Nov 2026, for the PRD:** a lead over 15 words always gets L9 (Major), grouped with its root cause where there is one, unless the logic is broken (D54: nothing else until L11 is fixed). In `stage1-lead.md` 1.2, and enforced by the review check (`caps.leadWordsMax` 15; a missing L9 regenerates). |
 | D56 | *Implementation.* A finding the model returns without its severity takes the level its rules require (the D50 floor) before the schema check, instead of costing a regeneration (it cost 4 retries in the first two pilots). The score-word exception (D51) also covers the chart's own text, so a 1–5 score axis (C10) doesn't trigger regeneration. |
 | D57 | **Chris, 15 Nov 2026:** C06's decision-focus point (fund which programme first) may come as a Major under L1/L10; it need not be an L6 hard stop. `calibration/expected.json` accepts L6, L1 or L10 at any severity for that point. No prompt change. |
+| D58 | **Chris, 16 Nov 2026:** on C02, an L4 minor asking for the multiple instead of "far ahead" is fine. `calibration/expected.json` moves L4 from mustNot to optional. No prompt change. |
 
 ## 15. Questions for Chris
 

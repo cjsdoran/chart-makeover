@@ -167,10 +167,21 @@
         ],
         "mustNot": [
           "A hard stop",
-          "L4 (no number is fine here)",
           "Any comment on the two panels"
         ],
-        "note": "Chris, 15 Nov 2026: \"sponsorship deals were inflated\" is overreach (L8), not a hard stop."
+        "optional": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L4"
+            ],
+            "severity": "minor",
+            "point": "Quote the multiple instead of 'far ahead'"
+          }
+        ],
+        "note": "Chris, 15 Nov 2026: \"sponsorship deals were inflated\" is overreach (L8), not a hard stop. Chris, 16 Nov 2026: an L4 minor asking for the number is fine (D58)."
       },
       "agreedLead": {
         "text": "Man City's commercial revenue ran far ahead of its football record from 09/10 to 17/18",
