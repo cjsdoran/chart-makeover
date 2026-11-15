@@ -1,7 +1,7 @@
 // The model-call cores (spec §7): what each function sends and how it reads the reply. The
 // functions use `finish`; the read test and the pilot harness call `read` in-process.
 import { taskSystemPrompt } from './prompts.mjs';
-import { checkSchema, parseModelJson } from '../../shared/schemaCheck.js';
+import { checkSchema, parseModelJson, schemaText } from '../../shared/schemaCheck.js';
 
 const INVALID_JSON = 'Your reply was not a single valid JSON object. Return only the JSON object.';
 
@@ -101,7 +101,8 @@ export function readChartStage(body) {
   const read = (text) => readReply(text, { schema: 'read-chart', fill: fillReading, check: checkReading });
   return {
     call: 'readChart',
-    system: prompt.text,
+    // The prompt ends at its Output heading; the schema it names follows, so there is one copy of it.
+    system: `${prompt.text}\n\n\`\`\`json\n${schemaText('read-chart')}\n\`\`\``,
     content: readChartContent(body),
     promptVersion: prompt.version,
     truncatedError: READ_CUT_OFF,

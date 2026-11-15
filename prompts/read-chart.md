@@ -1,4 +1,4 @@
-<!-- version: 1.0 · 14 Nov 2026 · draft; check it with the read test (build brief, milestone 2). No persona: this call transcribes, it doesn't review. -->
+<!-- version: 1.1 · 15 Nov 2026 · draft (1.1: the schema is appended to this prompt); check it with the read test (build brief, milestone 2). No persona: this call transcribes, it doesn't review. -->
 
 # Read the chart
 
@@ -32,4 +32,6 @@ The user message holds a JSON object with some of these:
 
 ## Output
 
-Return only a JSON object that matches `schemas/read-chart.json`. No prose before or after it.
+Return only a JSON object that matches the JSON Schema below: exactly its property names, no others, and every required property. Use null or an empty list where the page has nothing. No prose before or after it.
+
+If the message ends with `<previous_errors>`, your last reply failed those checks. Return a corrected JSON object.

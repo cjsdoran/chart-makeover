@@ -29,3 +29,8 @@ export function checkSchema(name, data) {
 }
 
 export { parseModelJson } from './modelJson.js';
+
+/** A schema as compact JSON, for prompts that must show the model the shape to return. */
+export function schemaText(name) {
+  return JSON.stringify(SCHEMAS[name]);
+}

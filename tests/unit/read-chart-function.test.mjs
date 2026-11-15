@@ -6,6 +6,7 @@ import readChart from '../../netlify/functions/read-chart.mjs';
 import { fillReading, readChartContent, READ_CUT_OFF } from '../../netlify/lib/stages.mjs';
 import { setClientFactoryForTests } from '../../netlify/lib/anthropic.mjs';
 import { loadPrompt } from '../../netlify/lib/prompts.mjs';
+import { schemaText } from '../../shared/schemaCheck.js';
 import { askDaniel } from '../../src/daniel/askDaniel.js';
 import { config } from '../../shared/limits.js';
 import { fakeClient, readEvents } from '../helpers/fakeAnthropic.js';
@@ -83,7 +84,11 @@ describe('T-READ-1: what the model receives', () => {
     reply(READING);
     await final(pdfBody());
     const params = client.beta.calls[0];
-    expect(params.system).toEqual([{ type: 'text', text: loadPrompt('read-chart').text, cache_control: { type: 'ephemeral' } }]);
+    expect(params.system).toEqual([{ type: 'text', text: expect.any(String), cache_control: { type: 'ephemeral' } }]);
+    const text = params.system[0].text;
+    expect(text.startsWith(loadPrompt('read-chart').text)).toBe(true);
+    // The schema follows the prompt, so the model knows the exact property names.
+    expect(text).toContain(schemaText('read-chart'));
     expect(params.system[0].text).not.toContain('Daniel Hart');
     expect(params.system[0].text).not.toContain('version:');
     expect(params).toMatchObject({ model: 'claude-opus-5-5', max_tokens: config.models.readChart.maxTokens, output_config: { effort: 'low' } });
@@ -93,7 +98,7 @@ describe('T-READ-1: what the model receives', () => {
 describe('what the browser gets', () => {
   it('a reading, with the prompt version and model', async () => {
     reply(READING);
-    expect(await final(pdfBody())).toMatchObject({ type: 'result', reading: READING, promptVersion: 'read-chart 1.0', servedBy: 'claude-opus-5-5' });
+    expect(await final(pdfBody())).toMatchObject({ type: 'result', reading: READING, promptVersion: 'read-chart 1.1', servedBy: 'claude-opus-5-5' });
   });
 
   it('T-FN-3: an unreadable page needs only its reason; the empty fields are filled', async () => {
