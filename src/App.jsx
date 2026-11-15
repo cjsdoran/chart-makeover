@@ -8,14 +8,10 @@ import { SetupScreen } from './screens/SetupScreen.jsx';
 import { ChatView } from './chat/ChatView.jsx';
 import { UploadCard } from './chat/UploadCard.jsx';
 import { StageInput } from './chat/StageInput.jsx';
-import { cannedReview } from './engine/canned.js';
 import { askDaniel } from './daniel/askDaniel.js';
 
-// Stage 1 is live from milestone 4 (/api/review); Stages 2–5 stay canned until milestone 5.
-const LIVE_STAGES = [1];
-const defaultReview = (request, accessCode) => (LIVE_STAGES.includes(request.stage)
-  ? askDaniel('/api/review', request, accessCode)
-  : cannedReview(request));
+// Every stage review goes to /api/review (milestone 5). Tests pass their own review (canned.js).
+const defaultReview = (request, accessCode) => askDaniel('/api/review', request, accessCode);
 import { clearSaved, createAutosaver, createSession, defaultStorage, loadSaved, newRunFrom, saveSession } from './store/session.js';
 
 export const OUTDATED_NOTICE =
@@ -106,9 +102,6 @@ function StepScreen({ session, updateSession, screens }) {
   const review = screens.review ?? defaultReview;
   return (
     <section aria-label="Chat">
-      {!screens.review && !['upload', 'lead'].includes(session.step) && (
-        <p className="notice" role="status">Preview: Daniel&rsquo;s reviews from Data fit onwards are canned test replies, not the model (live from milestone 5).</p>
-      )}
       <ChatView messages={session.chat} session={session} act={act} onUseOffer={useOffer} />
       {session.step === 'upload'
         ? <UploadCard session={session} updateSession={updateSession} deps={screens.upload} />

@@ -1,4 +1,4 @@
-<!-- version: 1.0 · 14 Nov 2026 · draft for calibration run 2. Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 5 — Fit check
 
@@ -29,7 +29,13 @@ Picture the original page with every accepted fix applied, and no declined fix.
 - If it needs an earlier stage redone (the lead no longer fits the planned chart; the data can't carry the transformed measure), set `reopenStage` to that stage (1–4) and say why in one sentence. Only when `reopensLeft` is 1; otherwise give the best fix you can and let the student decide.
 - If the data cannot prove the lead, set `route` to `{"options": ["rewriteLead", "nameData"]}` as in Stage 2.
 
-When everything passes, keep the message to two or three lines: what the page will now say in 10 seconds, and that the "Make these changes" button builds the illustrative slide.
+## Declined fixes
+
+`declines`, when present, lists the fixes the student has just declined, each with its `findingId` and reason. Answer every one in `declineResponses`: `accept` if the reason holds, or `pushBack` once with one sentence on why the fix still matters. A finding in `history` that already has a push-back gets `accept`. Never push back twice.
+
+## When everything passes
+
+Keep the message to two or three lines: what the page will now say in 10 seconds, and that the "Make these changes" button builds the illustrative slide.
 
 ## Rules
 

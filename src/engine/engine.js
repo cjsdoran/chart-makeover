@@ -79,6 +79,11 @@ export function openBlocking(run, stage) {
   return stageFindings(run, stage).filter((f) => isBlocking(f) && !isResolved(f));
 }
 
+/** Minor fixes and suggestions in a stage the student hasn't accepted yet (D59). */
+export function openMinors(run, stage) {
+  return stageFindings(run, stage).filter((f) => !isBlocking(f) && f.status === 'open');
+}
+
 /** The verdict from the findings' severities (D10): any hard stop, any major, else pass. */
 export function computeVerdict(findings) {
   if (findings.some((f) => f.severity === 'hardStop')) return 'hardStop';
@@ -335,12 +340,14 @@ export function applyReview(session, review, { now } = {}) {
 /**
  * What the student can do now in a stage's checklist: 'decide' (a blocking fix needs Accept or
  * Decline, or a push-back needs a final choice), 'send' (declines to send, a round left), 'moveOn'
- * (declines but no round left) or 'done'.
+ * (declines but no round left), 'minors' (the stage has passed its gate but minor fixes are still
+ * to accept or leave, D59) or 'done'.
  */
 export function checklistState(run, stage) {
   const open = openBlocking(run, stage);
   if (open.some((f) => f.status === 'open' || f.status === 'pushedBack')) return 'decide';
   if (open.some((f) => f.status === 'declined' && !f.sent)) return roundsLeft(run, stage) > 0 ? 'send' : 'moveOn';
+  if (!open.length && stage >= 2 && stage <= 4 && openMinors(run, stage).length) return 'minors';
   return 'done';
 }
 
@@ -359,7 +366,9 @@ export function settle(session, stage, { now } = {}) {
   // Stage 5 waits for the student's confirm or reopen (spec §5.7).
   if (stage === 5) return session;
   if (run.stages[stage].roundsUsed === 0) return session;
-  if (openBlocking(run, stage).length === 0) return finishStage(session, stage, 'passed', { now });
+  // With minor fixes still open, the stage waits for Accept all or Continue (D59), so they can
+  // still go into the redraw.
+  if (openBlocking(run, stage).length === 0 && openMinors(run, stage).length === 0) return finishStage(session, stage, 'passed', { now });
   return session;
 }
 
@@ -516,6 +525,13 @@ export function sendDeclines(session, { now } = {}) {
   const text = declines.map((f) => `I'm declining the ${f.rules.join('/')} fix (${f.location}): ${f.reason}`).join('\n');
   const next = addChat(patchRun(session, { pending: { stage } }), student(text, { kind: 'declines' }, now));
   return { session: next };
+}
+
+/** Continue with minor fixes left unaccepted (D59): the stage passes; they stay out of the redraw. */
+export function continueStage(session, { now } = {}) {
+  const stage = currentStage(session);
+  if (!stage || session.run.pending || checklistState(session.run, stage) !== 'minors') return { error: 'You can’t move on yet.' };
+  return { session: finishStage(session, stage, 'passed', { now }) };
 }
 
 /** At a cap with declined fixes unanswered: the stage moves on as cappedOpen (spec §5.3). */

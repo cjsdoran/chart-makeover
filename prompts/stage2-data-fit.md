@@ -1,4 +1,4 @@
-<!-- version: 1.0 · 14 Nov 2026 · draft for calibration run 2. Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 2 — Data fit
 
@@ -37,7 +37,7 @@ If `leadChanged` is true and the current chart cannot show the new lead even wit
 
 ## Declined fixes
 
-For each finding in `history` the student declined with a reason, add a `declineResponses` entry: `accept` if the reason holds, or `pushBack` once with one sentence on why the fix still matters. If you have already pushed back on it, accept and log it. Never push back twice.
+`declines`, when present, lists the fixes the student has just declined, each with its `findingId` and reason. Answer every one in `declineResponses`: `accept` if the reason holds, or `pushBack` once with one sentence on why the fix still matters. A finding in `history` that already has a push-back gets `accept`. Never push back twice.
 
 ## Rules
 

@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { config, limits } from '../../shared/limits.js';
 import { withCode } from '../../shared/errorCodes.js';
 import {
-  STAGE_NAMES, activeUpload, applyReview, checklistState, chooseNameData, chooseRewriteLead, confirmFit,
+  STAGE_NAMES, acceptAllMinor, activeUpload, applyReview, checklistState, continueStage, chooseNameData, chooseRewriteLead, confirmFit,
   confirmReading, currentStage, moveOn, plannedPage, reopenStage, reviewRequest, sendDeclines, setComparison, submitLead,
 } from '../engine/engine.js';
 import { PlannedPage } from './Findings.jsx';
@@ -11,7 +11,7 @@ import { Waiting } from './Waiting.jsx';
 /**
  * The input area under the chat (CM-7, spec §1): it changes with the step. `act(fn, ...args)` runs
  * an engine function on the session and returns its error, if any. `review(request, accessCode)`
- * makes the review call (canned in milestone 3).
+ * makes the review call (/api/review; tests pass canned reviews).
  */
 export function StageInput({ session, act, updateSession, review }) {
   const run = session.run;
@@ -193,6 +193,15 @@ function ChecklistBar({ session, act, stage }) {
         <>
           <p className="hint">Daniel will answer your reasons for the fixes you declined.</p>
           <div className="actions"><button type="button" className="btn" onClick={() => setError(act(sendDeclines))}>Send to Daniel</button></div>
+        </>
+      )}
+      {state === 'minors' && (
+        <>
+          <p className="hint">{STAGE_NAMES[stage]} has passed. Accept the minor fixes you want in the redraw, or continue without them.</p>
+          <div className="actions">
+            <button type="button" className="btn" onClick={() => setError(act(acceptAllMinor, stage))}>Accept all minor fixes</button>
+            <button type="button" className="btn secondary" onClick={() => setError(act(continueStage))}>Continue to {STAGE_NAMES[stage + 1]}</button>
+          </div>
         </>
       )}
       {state === 'moveOn' && (

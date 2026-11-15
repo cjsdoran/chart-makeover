@@ -157,6 +157,8 @@ describe('T-CHAT-3 and T-CHAT-1: the checklist', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Keep it and name the data' }));
     fireEvent.change(screen.getByLabelText('What data would prove your lead?'), { target: { value: 'Sponsorship values for comparable clubs' } });
     fireEvent.click(screen.getByRole('button', { name: 'Keep the lead' }));
+    // D59: the minor fixes are still open, so the stage waits for Accept all or Continue.
+    fireEvent.click(screen.getByRole('button', { name: 'Continue to Chart choice' }));
     expect(review.mock.calls.length).toBe(calls);
     expect(screen.getByRole('group', { name: config.openers.stage3 })).toBeTruthy();
   });
@@ -169,6 +171,7 @@ describe('T-CHAT-5: comparison picker', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Keep it and name the data' }));
     fireEvent.change(screen.getByLabelText('What data would prove your lead?'), { target: { value: 'Comparable sponsorship deals' } });
     fireEvent.click(screen.getByRole('button', { name: 'Keep the lead' }));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Accept all minor fixes' }).at(-1));
     const group = screen.getByRole('group', { name: config.openers.stage3 });
     expect(within(group).getAllByRole('radio').map((r) => r.labels[0].textContent)).toEqual([...config.comparisonOptions, 'Something else']);
     fireEvent.click(screen.getByRole('button', { name: 'Send to Daniel' }));

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { createSession } from '../../src/store/session.js';
 import { readingPatch } from '../../src/upload/sendChart.js';
 import {
-  acceptAllMinor, acceptFinding, applyReview, checklistState, chooseNameData, chooseRewriteLead, computeVerdict,
+  acceptAllMinor, acceptFinding, applyReview, checklistState, chooseNameData, chooseRewriteLead, computeVerdict, continueStage,
   confirmFit, confirmReading, declineFinding, finalChoice, moveOn, openBlocking, plannedPage, reopenStage,
   reviewRequest, sendDeclines, setComparison, stageFindings, submitLead,
 } from '../../src/engine/engine.js';
@@ -164,10 +164,30 @@ describe('T-ENG-7: accepting every blocking fix passes with no further call', ()
     s = ok(acceptFinding(s, a));
     expect(s.run.stages[2].status).toBe('open');
     s = ok(acceptFinding(s, b));
+    // D59: the minor fix is still open, so the stage waits for Accept all or Continue.
+    expect(s.run.stages[2].status).toBe('open');
+    expect(checklistState(s.run, 2)).toBe('minors');
+    s = ok(continueStage(s));
     expect(s.run.stages[2].status).toBe('passed');
     expect(s.run.stages[2].roundsUsed).toBe(1);
     expect(s.step).toBe('chart');
     expect(s.run.pending).toBeNull();
+  });
+
+  it('D59: a pass with only minor fixes waits; accepting them all moves on', () => {
+    let s = applyReview(atDataFit(), review(2, [minor('D4')]));
+    expect(s.run.stages[2].status).toBe('open');
+    expect(checklistState(s.run, 2)).toBe('minors');
+    s = ok(acceptAllMinor(s, 2));
+    expect(s.run.stages[2].status).toBe('passed');
+    expect(s.step).toBe('chart');
+    expect(plannedPage(s.run).acceptedFixes.map((f) => f.rules)).toEqual([['D4']]);
+  });
+
+  it('D59: a pass with no findings moves on at once; Continue is refused with nothing to decide', () => {
+    let s = applyReview(atDataFit(), review(2, []));
+    expect(s.run.stages[2].status).toBe('passed');
+    expect(continueStage(s).error).toBeTruthy();
   });
 
   it('refuses a decline with a reason under 10 characters', () => {
@@ -286,8 +306,11 @@ describe('T-ENG-9 (cont.): decisions already made stand', () => {
     const [m, n] = idsOf(s, 2);
     s = ok(sendDeclines(ok(declineFinding(s, m, 'We only have this measure'))));
     s = applyReview(s, review(2, [], { declineResponses: [{ findingId: 'S2-1', decision: 'accept', message: 'OK.' }] }));
-    expect(s.run.stages[2].status).toBe('passed');
+    expect(s.run.stages[2].status).toBe('open');
     expect(s.run.findings[n].status).toBe('open');
+    s = ok(acceptFinding(s, n));
+    expect(s.run.findings[n].status).toBe('accepted');
+    expect(s.run.stages[2].status).toBe('passed');
   });
 });
 

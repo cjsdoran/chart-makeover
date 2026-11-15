@@ -45,6 +45,8 @@ export async function reviewWithRetries(request) {
     const r = stage.read(reply.text);
     tries.push({
       attempt, ms, outcome: r.ok ? 'ok' : 'invalid', errors: r.ok ? undefined : r.errors, fixes: r.fixes.map((f) => f.type),
+      // The rejected reply, so a regeneration can be diagnosed from the saved run.
+      ...(r.ok ? {} : { text: reply.text.slice(0, 4000) }),
       inputTokens: reply.inputTokens, outputTokens: reply.outputTokens, servedBy: reply.servedBy,
     });
     if (r.ok) return { ok: true, data: r.data, fixes: r.fixes, tries, promptVersion: stage.promptVersion };

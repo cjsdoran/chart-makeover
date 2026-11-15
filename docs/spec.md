@@ -2,7 +2,7 @@
 
 Derived from "PRD — Chart Makeover" rev 58 (`docs/prd.md`, 14 Nov 2026), the build brief (`BUILD_BRIEF.md`), and the specs of Tree Surgery (TS D1–D27) and Question Time (QT D1–D24), whose code this app reuses. Requirement IDs CM-1 to CM-12 match the PRD; CMS-n IDs are added by this spec. Decisions are in §14, questions for Chris in §15.
 
-**Status:** milestones 1–3 built, 15 Nov 2026 (scaffold, intake and reading, D33–D40; chat shell and stage engine on canned reviews, D41–D48; Stage 1 live with the review check, D49–D53). RT-1 passed 10/10 with read prompt 1.1; P-1 (Stage 1) 10 of 10 with stage prompt 1.2 (D54–D58), every case on its first attempt. Chris's answers to §15 (D27–D32) are not in this file yet; the build follows the proposed defaults in §15 until they are.
+**Status:** milestone 5 built, 16 Nov 2026: Stages 2–5 live (D59–D61); P-2 4 of 9, misses and timing with Chris. Milestones 1–4 built, 15 Nov 2026 (scaffold, intake and reading, D33–D40; chat shell and stage engine on canned reviews, D41–D48; Stage 1 live with the review check, D49–D53). RT-1 passed 10/10 with read prompt 1.1; P-1 (Stage 1) 10 of 10 with stage prompt 1.2 (D54–D58), every case on its first attempt. Chris's answers to §15 (D27–D32) are not in this file yet; the build follows the proposed defaults in §15 until they are.
 
 **Base code.** Tree Surgery is the newer sibling and already has what this app needs most: PDF page rendering with the text layer, .pptx slide reading (groups flattened, pictures), NDJSON responses with keep-alive pings, stage cores shared by the functions and the pilot, the read test and the pilot harness. Copy from `../Tree Surgery App` first, and from `../Question Time App` only where Tree Surgery doesn't have it (D3).
 
@@ -131,7 +131,7 @@ Finding IDs from the model (`S2-1`) are namespaced by upload and round in the en
 - **Stage 1:** passes when the latest review has no blocking finding. Earlier rounds' findings are closed by the rewrite (status `closed`).
 - **Stages 2–5:** a blocking finding closes when it is `accepted`, or `declined` and Daniel has answered (accepted the reason, or pushed back once and the student made a final choice). The stage passes when no blocking finding is open.
 - The engine computes the verdict itself: `hardStop` if any finding is a hard stop, `revise` if any is major, else `pass`. If the model's `verdict` disagrees, the engine's wins and the mismatch goes to the call log (pilot P-2 reports them).
-- Minor findings and suggestions never gate. They appear in a collapsed "Minor fixes" group with **Accept all** (Q12); accepted ones go into the redraw.
+- Minor findings and suggestions never gate. They appear in a collapsed "Minor fixes" group with **Accept all** (Q12); accepted ones go into the redraw. When a stage has passed its gate with minors still open, it waits for **Accept all minor fixes** or **Continue** (D59).
 
 ### 5.3 Rounds and caps (`config/app.json` `caps`)
 
@@ -359,6 +359,9 @@ Never prompt text. File name `MGMT5760_<Case>_ChartMakeover_<StudentID>_<Attempt
 | D56 | *Implementation.* A finding the model returns without its severity takes the level its rules require (the D50 floor) before the schema check, instead of costing a regeneration (it cost 4 retries in the first two pilots). The score-word exception (D51) also covers the chart's own text, so a 1–5 score axis (C10) doesn't trigger regeneration. |
 | D57 | **Chris, 15 Nov 2026:** C06's decision-focus point (fund which programme first) may come as a Major under L1/L10; it need not be an L6 hard stop. `calibration/expected.json` accepts L6, L1 or L10 at any severity for that point. No prompt change. |
 | D58 | **Chris, 16 Nov 2026:** on C02, an L4 minor asking for the multiple instead of "far ahead" is fine. His extra advice on what a complaint would need (a fair-value benchmark, sponsor–owner links) is fine in Stage 1 too. `calibration/expected.json` moves L4 from mustNot to optional. No prompt change. |
+| D59 | **For the PRD (flow):** when a Stage 2–4 review leaves no blocking fix open but minor fixes the student hasn't accepted, the stage passes its gate but waits: **Accept all minor fixes** (moves on) or **Continue to <next stage>** (they stay out of the redraw). Before this, the stage moved on at once and its minors could never be accepted, so they never reached the planned page or the redraw. A stage with no open minors still moves on at once. Engine: `openMinors`, checklist state `minors`, `continueStage`. |
+| D60 | *Implementation.* Stage prompts 2–5 1.1 name the `declines` input the app sends (finding ID and reason) and ask for a `declineResponses` entry for each; 1.0 pointed at `history`, which also holds declines already answered. |
+| D61 | *Implementation.* Milestone 5: every stage goes to `/api/review` (the canned notice is gone; `canned.js` stays for the tests). P-2 runs in `scripts/pilot-chart.mjs`, driving the real engine from Stage 2 with the agreed lead applied as a Stage 1 pass, the browser's 1,600 px image, and a student who accepts every fix and confirms the page. The Stage 3 comparisons are Claude's stand-ins (`PILOT_STUDENT`: the comparison each agreed lead makes) and C06 is ticked as a dummy. C08 runs two paths: Stage 2 with `leadChanged` and one re-upload left (expect `reupload`), then Stages 3–5 on the original with none left. A Stage 2 or 5 route is answered with *Keep it and name the data*; a Stage 5 reopen suggestion is noted, not followed. |
 
 ## 15. Questions for Chris
 

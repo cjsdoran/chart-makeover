@@ -1,4 +1,4 @@
-<!-- version: 1.0 · 14 Nov 2026 · draft for calibration run 2. Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 3 — Chart choice
 
@@ -29,7 +29,7 @@ Say nothing about typos, the source line, titles, gridlines, legends or number f
 
 ## Declined fixes
 
-As in every chart stage: for each declined fix in `history`, `accept` if the reason holds, or `pushBack` once; never twice.
+`declines`, when present, lists the fixes the student has just declined, each with its `findingId` and reason. Answer every one in `declineResponses`: `accept` if the reason holds, or `pushBack` once with one sentence on why the fix still matters. A finding in `history` that already has a push-back gets `accept`. Never push back twice.
 
 ## Rules
 

@@ -129,6 +129,10 @@ Built and passing: T-ENG-1..14 (`tests/unit/engine.test.js`, on canned review JS
 
 Built and passing: T-REV-1 (stage prompt assembly: persona, overlay, stage prompt, each stage's rule table, L8/L11 for Stage 5, the schema), T-REV-2 (strip-and-log fixes, including the grouped-severity floor, D50), T-REV-3 (regeneration: more than three blocking findings, over 150 words, a score, a missing decline response, a lead rewrite before round 3), T-REV-4 (`/api/review`: result with versions and fix types, invalid then retry with previousErrors, omitted fields, bad bodies, size), and the pilot judge (`tests/unit/pilot.test.mjs`). P-1 ran live on 15 Nov 2026: `pilot/run-2026-11-15-stage1/report.md` (6 of 10; misses taken to Chris). Rerun after Chris's answers (D54), prompt 1.1: `pilot/run-2026-11-15-stage1-v1.1/report.md`, 7 of 10; prompt 1.2 with the L9 check (D55, D56): `pilot/run-2026-11-15-stage1-v1.2/report.md`, 8 of 10, all first attempt, slowest 14.3 s; 10 of 10 rescored after Chris accepted C06's Major (D57) and C02's L4 minor (D58). The judge now also checks logic first: with an L11 finding, nothing else is raised.
 
+### Milestone 5 status (16 Nov 2026)
+
+Built and passing: every stage live through `/api/review`; the minor-fix wait (D59: T-ENG-7 and two new engine tests, T-CHAT-3 and T-CHAT-5 updated); the P-2 driver and judge (`tests/unit/pilot.test.mjs`, scripted replies on the real engine). P-2 ran live on 16 Nov 2026: `pilot/run-2026-11-16-chart/report.md`, 4 of 9 cases pass, 35 valid replies, slowest 17.8 s per call. But 9 replies were cut off at 1,600 tokens and retried, so 10 of 36 turns took over 20 s (worst 42.6 s), and C02's Stage 5 failed all three attempts on the score check. Misses taken to Chris.
+
 ## 3. Real-model checks (only when Chris asks)
 
 | ID | Check | Pass |
