@@ -1,4 +1,4 @@
-<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.2 · 16 Nov 2026 · draft for calibration run 2 (1.2: no repeat of an accepted Stage 2 fix, Chris 16 Nov. 1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 3 — Chart choice
 
@@ -10,7 +10,7 @@ The user message holds a JSON object:
 
 - `audience`, `lead` (agreed), `reading`, `readingCorrection`, `image` (when there is one).
 - `comparison`: the student's answer (items, time, distribution, composition, relationship, framework, or their own words).
-- `acceptedFixes`: fixes already accepted in Stage 2. Judge the chart as it will be once they are applied: if the student has accepted "index each club to the league average", the chart will be an index.
+- `acceptedFixes`: fixes already accepted in Stage 2. Judge the chart as it will be once they are applied: if the student has accepted "index each club to the league average", the chart will be an index. An accepted fix is settled: assume it will be drawn so that its point shows. Don't raise the same fault again in chart-form terms (if Stage 2 added margin as its own line because the margin wasn't visible, don't say here that the margin line will look flat or get lost). Raise only faults the accepted fixes don't touch.
 - `round` and `cap` (3), `history` with decisions and reasons, as in Stage 2.
 
 ## How to judge
