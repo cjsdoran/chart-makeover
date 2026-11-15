@@ -358,7 +358,7 @@ Never prompt text. File name `MGMT5760_<Case>_ChartMakeover_<StudentID>_<Attempt
 | D55 | **Chris, 15 Nov 2026, for the PRD:** a lead over 15 words always gets L9 (Major), grouped with its root cause where there is one, unless the logic is broken (D54: nothing else until L11 is fixed). In `stage1-lead.md` 1.2, and enforced by the review check (`caps.leadWordsMax` 15; a missing L9 regenerates). |
 | D56 | *Implementation.* A finding the model returns without its severity takes the level its rules require (the D50 floor) before the schema check, instead of costing a regeneration (it cost 4 retries in the first two pilots). The score-word exception (D51) also covers the chart's own text, so a 1–5 score axis (C10) doesn't trigger regeneration. |
 | D57 | **Chris, 15 Nov 2026:** C06's decision-focus point (fund which programme first) may come as a Major under L1/L10; it need not be an L6 hard stop. `calibration/expected.json` accepts L6, L1 or L10 at any severity for that point. No prompt change. |
-| D58 | **Chris, 16 Nov 2026:** on C02, an L4 minor asking for the multiple instead of "far ahead" is fine. `calibration/expected.json` moves L4 from mustNot to optional. No prompt change. |
+| D58 | **Chris, 16 Nov 2026:** on C02, an L4 minor asking for the multiple instead of "far ahead" is fine. His extra advice on what a complaint would need (a fair-value benchmark, sponsor–owner links) is fine in Stage 1 too. `calibration/expected.json` moves L4 from mustNot to optional. No prompt change. |
 
 ## 15. Questions for Chris
 
