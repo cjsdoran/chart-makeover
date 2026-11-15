@@ -48,6 +48,9 @@ export function quotedPassages(message) {
   return out;
 }
 
+// A Gen AI tool named as the source (P2: always a hard stop, Chris 16 Nov 2026, D63).
+export const GEN_AI_SOURCE = /\b(chat ?gpt|gen(erative)? ?ai|openai|gpt-?\d|gemini|copilot|perplexity)\b/i;
+
 const SCORE = /\b\d+(\.\d+)?\s*(\/|out of)\s*(5|10|100)\b/i;
 const SCORE_WORDS = /\b(scor(e|es|ed|ing)|grade[sd]?|grading|rating|rated)\b/i;
 
@@ -65,7 +68,14 @@ export function checkReview(review, { stage, round, input = {} }) {
 
   // Rule IDs exist and belong to this stage; severities are allowed (multi-rule: the most severe
   // value any of its rules allows).
+  // D7 (data obtainable) is for dummy charts only (D63): dropped for a chart of real data.
+  const dummy = Boolean(input.isDummy || input.reading?.texts?.illustrativeLabel);
+  const genAiSource = GEN_AI_SOURCE.test(input.reading?.texts?.source ?? '');
   data.findings = data.findings.flatMap((f) => {
+    if (stage === 2 && !dummy && f.rules.includes('D7')) {
+      fix('ruleNotForChart', { id: f.id, rules: ['D7'] });
+      f = { ...f, rules: f.rules.filter((id) => id !== 'D7') };
+    }
     const rules = f.rules.filter((id) => RULES[id]?.stages.includes(stage));
     if (rules.length < f.rules.length) fix('ruleNotInStage', { rules: f.rules.filter((id) => !rules.includes(id)) });
     if (!rules.length) {
@@ -77,7 +87,10 @@ export function checkReview(review, { stage, round, input = {} }) {
     const allowed = [...new Set(rules.flatMap((id) => RULES[id].allowed))];
     const floor = floorSeverity(rules);
     let severity = f.severity;
-    if (ORDER.indexOf(severity) > ORDER.indexOf(floor)) {
+    if (stage === 4 && genAiSource && rules.includes('P2') && severity !== 'hardStop') {
+      fix('severityRaised', { id: f.id, from: severity, to: 'hardStop', why: 'genAiSource' });
+      severity = 'hardStop';
+    } else if (ORDER.indexOf(severity) > ORDER.indexOf(floor)) {
       severity = floor;
       fix('severityRaised', { id: f.id, from: f.severity, to: severity });
     } else if (!allowed.includes(severity)) {

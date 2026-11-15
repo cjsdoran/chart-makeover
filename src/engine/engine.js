@@ -193,7 +193,7 @@ export function reviewRequest(session) {
   const image = upload?.image1600 ? { image: upload.image1600 } : {};
   const common = { ...base, ...image, cap: run.stages[stage].roundsAllowed, history, ...(declines.length ? { declines } : {}) };
   const input = {
-    2: () => ({ ...common, leadChanged: Boolean(pending.leadChanged), reuploadsLeft: run.reuploadsLeft, dataToSource: run.dataToSource }),
+    2: () => ({ ...common, leadChanged: Boolean(pending.leadChanged), reuploadsLeft: run.reuploadsLeft, dataToSource: run.dataToSource, isDummy: run.isDummy }),
     3: () => ({ ...common, comparison: run.comparison, acceptedFixes: acceptedFixes(run, [2]) }),
     4: () => ({ ...common, comparison: run.comparison, isDummy: run.isDummy, acceptedFixes: acceptedFixes(run, [2, 3]) }),
     5: () => ({ ...base, plannedPage: plannedPage(run), reopensLeft: run.reopensLeft, history, ...(declines.length ? { declines } : {}) }),

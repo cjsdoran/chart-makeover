@@ -260,3 +260,27 @@ describe('T-REV-4: the function', () => {
     expect(r.fixes.map((f) => f.type)).toEqual(['whatWorksStripped']);
   });
 });
+
+describe('D63: the source line belongs to Stage 4 (Chris, 16 Nov 2026)', () => {
+  const chartInput = (extra = {}) => ({ audience: 'Head of International', lead: 'Vietnam grows fastest', reading: { texts: { source: 'Source: ChatGPT analysis, October 2026' } }, ...extra });
+  const s = (stage, findings) => rev({ stage, verdict: 'revise', findings, message: 'Short.' });
+
+  it('Stage 2 drops D7 on a chart of real data, and keeps it on a dummy chart', () => {
+    const d7 = finding({ id: 'S2-1', rules: ['D7'], severity: 'major' });
+    const grouped = finding({ id: 'S2-2', rules: ['D1', 'D7'], severity: 'major' });
+    const real = checkReview(s(2, [d7, grouped]), { stage: 2, round: 1, input: chartInput({ isDummy: false }) });
+    expect(real.data.findings.map((f) => f.rules)).toEqual([['D1']]);
+    expect(real.fixes.map((f) => f.type)).toContain('ruleNotForChart');
+    const dummy = checkReview(s(2, [d7]), { stage: 2, round: 1, input: chartInput({ isDummy: true }) });
+    expect(dummy.data.findings.map((f) => f.rules)).toEqual([['D7']]);
+  });
+
+  it('Stage 4 raises P2 to a hard stop when the source names a Gen AI tool, even on a dummy chart', () => {
+    const p2 = finding({ id: 'S4-1', rules: ['P2'], severity: 'major' });
+    const c = checkReview(s(4, [p2]), { stage: 4, round: 1, input: chartInput({ isDummy: true }) });
+    expect(c.data.findings[0].severity).toBe('hardStop');
+    expect(c.data.verdict).toBe('hardStop');
+    const other = checkReview(s(4, [p2]), { stage: 4, round: 1, input: chartInput({ reading: { texts: { source: 'Kestrel management accounts' } } }) });
+    expect(other.data.findings[0].severity).toBe('major');
+  });
+});

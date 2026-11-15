@@ -1,4 +1,4 @@
-<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.2 · 16 Nov 2026 · draft for calibration run 2 (1.2: a Gen AI source is always a hard stop, Chris 16 Nov. 1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 4 — Polish
 
@@ -15,7 +15,7 @@ The user message holds a JSON object:
 
 ## How to judge
 
-1. **Hard stops first.** Source line (P2): missing, or "Gen AI", "ChatGPT" or similar given as a source, is a hard stop. For a dummy chart, a missing source is major: the page must say where the data will come from. A source that is present but wrong for the data (a market forecast "from management accounts") is major.
+1. **Hard stops first.** Source line (P2): missing, or "Gen AI", "ChatGPT" or similar given as a source, is a hard stop. A Gen AI source is a hard stop on every page, dummy or real. For a dummy chart, a missing source is major: the page must say where the data will come from. A source that is present but wrong for the data (a market forecast "from management accounts") is major.
 2. **Typos on the chart (P1, major).** Typos in the lead were Stage 1. Quote the exact misspelt word and where it is. Use the reading's verbatim text; never report a typo you are not sure of. If the word is in the reading's `uncertain` list, ask instead of asserting. A false typo costs more than a missed one.
 3. **Standard template (P3, major).** The lead is the slide title (a topic title such as "Revenue mix 2025" fails). The chart title says what the data is, its unit and period, and the CAGR where relevant. Keys such as bubble size go in a legend, not in the title.
 4. **Labels and units (P7, major).** Every axis, unit and series identifiable; no bare numbers ("3100; 37%").
