@@ -141,3 +141,29 @@ body {
 @media (max-width: 720px) {
   .msg { max-width: 100%; }
 }
+
+/* Stage chat (milestone 3): findings, checklist, offer, planned page. */
+.msg.wide { max-width: 100%; }
+.rules { display: inline-flex; gap: var(--praxis-space-1); }
+.rule { border: 1px solid var(--praxis-navy-700); border-radius: var(--praxis-radius); padding: 0 var(--praxis-space-1); font-size: 0.8125rem; }
+.findings.compact { margin: var(--praxis-space-2) 0 0; padding-left: 1.25rem; }
+.findings.compact li { margin-bottom: var(--praxis-space-1); }
+.checklist { display: grid; gap: var(--praxis-space-3); margin-top: var(--praxis-space-3); }
+.finding { background: var(--praxis-white); border: 1px solid var(--praxis-grey-300); border-radius: var(--praxis-radius); padding: var(--praxis-space-3) var(--praxis-space-4); }
+.finding.blocking { border-left: 6px solid var(--praxis-accent-700); }
+.finding-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--praxis-space-2); }
+.finding-head .where { color: var(--praxis-grey-700); font-size: var(--praxis-text-sm); }
+.finding-status { font-weight: 600; }
+.daniel-reply { border-left: 3px solid var(--praxis-navy-700); padding-left: var(--praxis-space-3); }
+.finding .actions { margin-top: var(--praxis-space-2); }
+.minors summary { cursor: pointer; font-weight: 600; padding: var(--praxis-space-2) 0; }
+.minors .finding { margin-top: var(--praxis-space-2); }
+.offer { margin: var(--praxis-space-3) 0 0; border: 2px solid var(--praxis-navy-700); border-radius: var(--praxis-radius); padding: var(--praxis-space-3) var(--praxis-space-4); background: var(--praxis-white); }
+.offer blockquote { margin: 0; font-size: var(--praxis-text-md); font-weight: 600; }
+.offer figcaption { font-size: var(--praxis-text-sm); color: var(--praxis-grey-700); margin-top: var(--praxis-space-2); }
+.planned { background: var(--praxis-white); border: 1px solid var(--praxis-navy-700); border-radius: var(--praxis-radius); padding: var(--praxis-space-3) var(--praxis-space-4); margin-top: var(--praxis-space-3); }
+.planned h3 { margin: 0 0 var(--praxis-space-2); font-size: var(--praxis-text-md); }
+.planned h4 { margin: var(--praxis-space-3) 0 var(--praxis-space-1); font-size: var(--praxis-text-sm); }
+.planned ol, .planned ul { margin: 0; padding-left: 1.25rem; }
+fieldset.field { border: 0; padding: 0; }
+fieldset .checkbox { margin: var(--praxis-space-1) 0; }

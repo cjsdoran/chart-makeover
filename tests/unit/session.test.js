@@ -1,4 +1,5 @@
 // Milestone 1: the autosave store (CMS-2, T-SAV-1..2), ported from Tree Surgery.
+import { engineFields } from '../../src/engine/engine.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   STORAGE_KEY,
@@ -30,7 +31,7 @@ describe('createSession', () => {
     const s = createSession({ now });
     expect(s).toMatchObject({ version: 1, step: 'setup', startedAt: now.toISOString(), endedAt: null, setup: null, chat: [], blockedUploads: [] });
     expect(s.attemptId).toMatch(/^[A-Z2-7]{8}$/);
-    expect(s.run).toEqual({ audience: '', isDummy: false, uploads: [], activeUpload: null, unreadable: [] });
+    expect(s.run).toEqual({ audience: '', isDummy: false, uploads: [], activeUpload: null, unreadable: [], ...engineFields() });
     expect(s.draft).toEqual({ audience: '', isDummy: false });
   });
 });

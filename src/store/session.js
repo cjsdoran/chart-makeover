@@ -2,6 +2,7 @@
 // in localStorage under one key; nothing is stored server-side. Every storage call is wrapped so a
 // blocked or full store degrades to a warning rather than breaking the app.
 import { config } from '../../shared/limits.js';
+import { engineFields, withEngine } from '../engine/engine.js';
 
 export const STORAGE_KEY = 'cm.v1.session';
 // A session saved by another version is not resumed (as QT D17).
@@ -36,7 +37,7 @@ export function createSession({ now = new Date(), randomBytes } = {}) {
     setup: null,
     // The upload card's draft, so a reload keeps the audience line (the file can't be kept).
     draft: { audience: '', isDummy: false },
-    // The run (spec §5.1). Milestone 3 adds the stage engine's fields.
+    // The run (spec §5.1): the uploads, then the stage engine's fields (src/engine/engine.js).
     run: {
       audience: '',
       isDummy: false,
@@ -44,6 +45,7 @@ export function createSession({ now = new Date(), randomBytes } = {}) {
       activeUpload: null,
       // Uploads the read call couldn't read: time, file name, reason (spec §3.5).
       unreadable: [],
+      ...engineFields(),
     },
     // The chat thread: Daniel's messages and the student's turns, in order (CM-7).
     chat: [],
@@ -97,7 +99,9 @@ export function loadSaved(storage = defaultStorage()) {
     if (!raw) return { session: null, ok: true };
     const parsed = JSON.parse(raw);
     if (isOutdated(parsed)) return { session: null, ok: true, outdated: true };
-    return { session: isSession(parsed) ? parsed : null, ok: true };
+    if (!isSession(parsed)) return { session: null, ok: true };
+    // A run saved before the stage engine's fields existed gets them (milestone 3).
+    return { session: parsed.run ? { ...parsed, run: withEngine(parsed.run) } : parsed, ok: true };
   } catch {
     return { session: null, ok: false };
   }

@@ -7,6 +7,8 @@ import { StorageWarning } from './components/StorageWarning.jsx';
 import { SetupScreen } from './screens/SetupScreen.jsx';
 import { ChatView } from './chat/ChatView.jsx';
 import { UploadCard } from './chat/UploadCard.jsx';
+import { StageInput } from './chat/StageInput.jsx';
+import { cannedReview } from './engine/canned.js';
 import { clearSaved, createAutosaver, createSession, defaultStorage, loadSaved, newRunFrom, saveSession } from './store/session.js';
 
 export const OUTDATED_NOTICE =
@@ -86,13 +88,24 @@ export default function App({ storage = defaultStorage(), screens = {} }) {
 
 function StepScreen({ session, updateSession, screens }) {
   if (session.step === 'setup') return <SetupScreen session={session} updateSession={updateSession} check={screens.check} />;
+  // Runs an engine function (src/engine/engine.js) on the session; returns its error, if any.
+  const act = (fn, ...args) => {
+    const r = fn(session, ...args);
+    if (r.error) return r.error;
+    updateSession(() => r.session, { immediate: true });
+    return null;
+  };
+  const useOffer = (text) => updateSession((s) => ({ draft: { ...(s.draft ?? {}), lead: text } }));
+  const review = screens.review ?? cannedReview;
   return (
     <section aria-label="Chat">
-      <ChatView messages={session.chat} />
-      {session.step === 'upload' && <UploadCard session={session} updateSession={updateSession} deps={screens.upload} />}
-      {session.step === 'lead' && (
-        <p className="notice" role="status">Stage 1, the lead, arrives in the next build (milestone 3).</p>
+      {!screens.review && session.step !== 'upload' && (
+        <p className="notice" role="status">Milestone 3 preview: Daniel&rsquo;s stage reviews here are canned test replies, not the model.</p>
       )}
+      <ChatView messages={session.chat} session={session} act={act} onUseOffer={useOffer} />
+      {session.step === 'upload'
+        ? <UploadCard session={session} updateSession={updateSession} deps={screens.upload} />
+        : <StageInput session={session} act={act} updateSession={updateSession} review={review} />}
     </section>
   );
 }

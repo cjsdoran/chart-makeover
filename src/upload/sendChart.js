@@ -3,6 +3,7 @@
 import { config } from '../../shared/limits.js';
 import { CODES } from '../../shared/errorCodes.js';
 import { askDaniel } from '../daniel/askDaniel.js';
+import { afterReupload } from '../engine/engine.js';
 
 let counter = 0;
 const messageId = () => `m-${Date.now().toString(36)}-${(counter += 1)}`;
@@ -68,6 +69,13 @@ export function readingPatch(session, { prepared, result, audience, isDummy }) {
     readModel: result.servedBy ?? null,
   };
   const first = session.run.uploads.length === 0;
+  // The redrawn chart Daniel asked for (spec §5.6): the engine supersedes the old chart's open
+  // Stage 2 findings and asks the student to confirm the new reading.
+  if (!first && session.run.awaitingReupload) {
+    const run = { ...session.run, uploads: [...session.run.uploads, upload], activeUpload: id };
+    const next = afterReupload({ ...session, run });
+    return { outcome: 'read', patch: { run: next.run, chat: next.chat, step: next.step, draft: { audience: '', isDummy: false } } };
+  }
   return {
     outcome: 'read',
     patch: {

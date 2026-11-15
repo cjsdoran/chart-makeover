@@ -31,7 +31,9 @@ export function UploadCard({ session, updateSession, deps = {} }) {
   const audience = draft.audience;
   const tooLong = audience.trim().length > limits.audienceMaxChars;
   const isPptx = fileType(file?.name) === 'pptx';
-  const canSend = Boolean(file) && audience.trim().length > 0 && !tooLong && !busy;
+  // A re-upload (spec §5.6) keeps the run's audience line and tickbox.
+  const reupload = session.run.uploads.length > 0;
+  const canSend = Boolean(file) && (reupload || (audience.trim().length > 0 && !tooLong)) && !busy;
 
   useEffect(() => {
     if (!isPptx && sameSlide) {
@@ -65,7 +67,7 @@ export function UploadCard({ session, updateSession, deps = {} }) {
     if (!canSend) return;
     setError(null);
     setPending(null);
-    updateSession((s) => ({ chat: [...s.chat, studentTurn({ fileName: file.name, sameSlideName: isPptx ? sameSlide?.name : null, audience: audience.trim() })] }), { immediate: true });
+    updateSession((s) => ({ chat: [...s.chat, studentTurn({ fileName: file.name, sameSlideName: isPptx ? sameSlide?.name : null, audience: reupload ? '' : audience.trim() })] }), { immediate: true });
     setBusy('checking');
     let prepared;
     try {
@@ -87,7 +89,7 @@ export function UploadCard({ session, updateSession, deps = {} }) {
   const counterId = 'upload-audience-count';
   return (
     <form className="composer" onSubmit={send} noValidate aria-labelledby="upload-heading">
-      <h2 id="upload-heading">Your chart</h2>
+      <h2 id="upload-heading">{reupload ? 'Your redrawn chart' : 'Your chart'}</h2>
       <div className="field">
         <label htmlFor="upload-file">One chart</label>
         <p className="hint" id="upload-file-hint">
@@ -108,6 +110,7 @@ export function UploadCard({ session, updateSession, deps = {} }) {
         </div>
       )}
 
+      {!reupload && (<>
       <div className="field">
         <label htmlFor="upload-audience">{config.openers.setup}</label>
         <textarea id="upload-audience" rows={3} value={audience} disabled={Boolean(busy)}
@@ -124,6 +127,7 @@ export function UploadCard({ session, updateSession, deps = {} }) {
           onChange={(e) => setDraft({ isDummy: e.target.checked })} />
         <label htmlFor="upload-dummy">These values are illustrative: it&rsquo;s a dummy chart, not real data yet.</label>
       </div>
+      </>)}
 
       {error && (
         <div role="alert">

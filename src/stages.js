@@ -1,24 +1,25 @@
-// The stages on the tracker (CM-7, spec §1). Milestone 3's engine adds "moved on" (cap reached).
+// The stages on the tracker (CM-7, spec §1): to do, current, passed or moved on (cap reached).
+import { trackerStatus } from './engine/engine.js';
+
 export const STAGES = [
   { id: 'setup', label: 'Set-up' },
-  { id: 'lead', label: 'Lead' },
-  { id: 'data', label: 'Data fit' },
-  { id: 'chart', label: 'Chart choice' },
-  { id: 'polish', label: 'Polish' },
-  { id: 'fit', label: 'Fit check' },
+  { id: 'lead', label: 'Lead', n: 1 },
+  { id: 'data', label: 'Data fit', n: 2 },
+  { id: 'chart', label: 'Chart choice', n: 3 },
+  { id: 'polish', label: 'Polish', n: 4 },
+  { id: 'fit', label: 'Fit check', n: 5 },
   { id: 'changes', label: 'Changes' },
 ];
 
-// Which tracker stage each session step belongs to.
-const STEP_STAGE = { setup: 'setup', upload: 'setup', lead: 'lead', data: 'data', chart: 'chart', polish: 'polish', fit: 'fit', changes: 'changes', record: 'changes' };
-
 /** @returns {Record<string, 'passed'|'current'|'movedOn'|'toDo'>} */
 export function stageStatuses(session) {
-  const current = STAGES.findIndex((s) => s.id === (STEP_STAGE[session?.step] ?? 'setup'));
-  const moved = session?.run?.movedOn ?? [];
-  return Object.fromEntries(STAGES.map((s, i) => {
-    if (i === current) return [s.id, 'current'];
-    if (i < current) return [s.id, moved.includes(s.id) ? 'movedOn' : 'passed'];
-    return [s.id, 'toDo'];
+  const step = session?.step ?? 'setup';
+  const inSetup = step === 'setup' || (step === 'upload' && !(session?.run?.uploads?.length));
+  const atEnd = step === 'changes' || step === 'record';
+  return Object.fromEntries(STAGES.map((s) => {
+    if (s.id === 'setup') return [s.id, inSetup ? 'current' : 'passed'];
+    if (s.id === 'changes') return [s.id, atEnd ? 'current' : 'toDo'];
+    if (!session?.run?.stages) return [s.id, 'toDo'];
+    return [s.id, trackerStatus(session, s.n)];
   }));
 }

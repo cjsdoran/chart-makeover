@@ -121,6 +121,10 @@ Built and passing (`npm test`): T-SET-1, T-SU-1, T-SU-2 (stored; Stage 2/4/redra
 - `photo.heic`: no real HEIC file; T-UP-6 checks the HEIC path with a mocked converter (heic2any runs only in the browser). Check one real iPhone photo by hand before launch.
 - T-PDF-3 checks the asset URLs; the browser render with fonts was checked by hand in the browser pane (C09: text layer and 2,000 px page).
 
+### Milestone 3 status (15 Nov 2026)
+
+Built and passing: T-ENG-1..14 (`tests/unit/engine.test.js`, on canned review JSON, no model), T-CHAT-1..8 (`tests/unit/chat.test.jsx`; T-CHAT-7 now covers the review call too). The click-through (lead → offer → reading → checklist with decline, name the data, push-back → comparison → polish → planned page → reopen Chart choice → confirm → Changes) was checked in the browser pane on `src/engine/canned.js`, desktop and phone width. RT-1 passed 10/10 (read prompt 1.1).
+
 ## 3. Real-model checks (only when Chris asks)
 
 | ID | Check | Pass |
