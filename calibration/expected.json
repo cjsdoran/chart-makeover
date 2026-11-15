@@ -169,7 +169,8 @@
           "A hard stop",
           "L4 (no number is fine here)",
           "Any comment on the two panels"
-        ]
+        ],
+        "note": "Chris, 15 Nov 2026: \"sponsorship deals were inflated\" is overreach (L8), not a hard stop."
       },
       "agreedLead": {
         "text": "Man City's commercial revenue ran far ahead of its football record from 09/10 to 17/18",
@@ -315,23 +316,28 @@
             ],
             "severity": "hardStop",
             "point": "Non-sequitur: being biggest by revenue doesn't justify the most capital"
-          },
-          {
-            "stages": [
-              1
-            ],
-            "rules": [
-              "L7"
-            ],
-            "severity": "hardStop",
-            "point": "Restates what the CEO already believes"
           }
         ],
         "mustNot": [
           "Any comment on the pie, 3D, legend or missing source ('no point putting lipstick on a pig')",
           "whatWorks",
           "offeredLead"
-        ]
+        ],
+        "afterLogicFixed": {
+          "note": "Chris, 15 Nov 2026: when the logic breaks (L11), Daniel says nothing more until a new lead fixes it; these points come once it does. Not judged in a one-round pilot.",
+          "mustCatch": [
+            {
+              "stages": [
+                1
+              ],
+              "rules": [
+                "L7"
+              ],
+              "severity": "hardStop",
+              "point": "Restates what the CEO already believes"
+            }
+          ]
+        }
       },
       "agreedLead": null,
       "chartStages": null,
@@ -349,37 +355,42 @@
               1
             ],
             "rules": [
-              "L2",
-              "L7"
-            ],
-            "severity": "hardStop",
-            "point": "'Varies widely' is padding or motherhood: no conclusion. Hand it back and ask what they want to say"
-          },
-          {
-            "stages": [
-              1
-            ],
-            "rules": [
               "L11"
             ],
             "severity": "hardStop",
             "point": "No rent trend in the data: 'rents rising too fast' is unsupported (and too fast for what?)"
-          },
-          {
-            "stages": [
-              1
-            ],
-            "rules": [
-              "L1"
-            ],
-            "severity": "major",
-            "point": "Two messages"
           }
         ],
         "mustNot": [
           "Finding the conclusion for the student (e.g. naming the loss-making stores)",
           "Any comment on the table's formatting"
-        ]
+        ],
+        "afterLogicFixed": {
+          "note": "Chris, 15 Nov 2026: when the logic breaks (L11), Daniel says nothing more until a new lead fixes it; these points come once it does. Not judged in a one-round pilot.",
+          "mustCatch": [
+            {
+              "stages": [
+                1
+              ],
+              "rules": [
+                "L2",
+                "L7"
+              ],
+              "severity": "hardStop",
+              "point": "'Varies widely' is padding or motherhood: no conclusion. Hand it back and ask what they want to say"
+            },
+            {
+              "stages": [
+                1
+              ],
+              "rules": [
+                "L1"
+              ],
+              "severity": "major",
+              "point": "Two messages"
+            }
+          ]
+        }
       },
       "agreedLead": null,
       "pilotLead": {
@@ -536,9 +547,20 @@
           }
         ],
         "mustNot": [
-          "L8 on the action (this chart alone supports it)",
           "A hard stop",
           "Any chart comment"
+        ],
+        "optional": [
+          {
+            "stages": [
+              1
+            ],
+            "rules": [
+              "L8"
+            ],
+            "severity": "major",
+            "point": "Chris, 15 Nov 2026: partly overreach. Pushing the action can provoke the decision; locking it down needs more evidence. Either judgement is acceptable."
+          }
         ]
       },
       "agreedLead": {

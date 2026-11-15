@@ -93,6 +93,11 @@ export function judgeStage1(exp, data, global) {
     else if (/^whatWorks$/i.test(text)) add(`mustNot: ${text}`, !data.whatWorks);
     else forChris.push(text);
   }
+  // Logic first (Chris, 15 Nov 2026): with an L11 finding, nothing else is raised until a new lead fixes it.
+  if (data.findings.some((f) => f.rules.includes('L11'))) {
+    const others = data.findings.filter((f) => !f.rules.includes('L11'));
+    add('logic first: nothing but L11', others.length === 0, others.map((f) => f.rules.join('/')).join('; '));
+  }
   // globalMustNot, as far as code can tell (the review check has already fixed the strippable ones).
   add('global: no score', !/\b\d+(\.\d+)?\s*(\/|out of)\s*(5|10|100)\b/i.test(data.message));
   add('global: no offeredLead in round 1', data.offeredLead === null);

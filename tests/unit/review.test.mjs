@@ -49,7 +49,9 @@ describe('T-REV-1: the stage prompt (spec §8)', () => {
       expect(p.text).toContain(loadPrompt('overlay-chart-makeover').text);
       expect(p.text).not.toMatch(/\{\{[A-Z0-9_]+\}\}/);
       expect(p.text).toContain(schemaText('stage-review'));
-      expect(p.version).toMatch(new RegExp(`^${STAGE_PROMPTS[stage]} 1\\.0; persona 1\\.0; overlay 1\\.0; rules 1\\.0`));
+      const v = (n) => loadPrompt(n).version;
+      expect(p.version).toBe(`${STAGE_PROMPTS[stage]} ${v(STAGE_PROMPTS[stage])}; persona ${v('persona')}; overlay ${v('overlay-chart-makeover')}; `
+        + `rules ${v('shared/rule-library')}; faults ${v('shared/fault-library')}; format ${v('shared/feedback-format')}`);
     }
   });
 
@@ -193,7 +195,7 @@ describe('T-REV-4: the function', () => {
     reply(rev({ verdict: 'pass' }));
     const ev = await final(body1());
     expect(ev).toMatchObject({ type: 'result', data: { verdict: 'hardStop', stage: 1 }, rulesVersion: expect.stringMatching(/^1\.0/), fixes: ['verdictMismatch'] });
-    expect(ev.promptVersion).toMatch(/^stage1-lead 1\.0; persona/);
+    expect(ev.promptVersion.startsWith(`stage1-lead ${loadPrompt('stage1-lead').version}; persona`)).toBe(true);
     const logged = console.log.mock.calls.map((c) => JSON.parse(c[0])).find((l) => l.endpoint === 'review');
     expect(logged).toMatchObject({ round: 'stage1-r1', outcome: 'ok', fixes: ['verdictMismatch'] });
     expect(JSON.stringify(logged)).not.toContain('Looking at the data');
