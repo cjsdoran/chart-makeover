@@ -1,4 +1,4 @@
-<!-- version: 1.1 · 16 Nov 2026 · draft for calibration run 2 (1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.2 · 16 Nov 2026 · draft for calibration run 2 (1.2: partial coverage stays a D4 minor, Chris 16 Nov. 1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 5 — Fit check
 
@@ -20,7 +20,7 @@ Picture the original page with every accepted fix applied, and no declined fix.
 2. **Shape (F2).** A time-series chart carries a lead about change; a ranking chart, a lead about rank.
 3. **Same measure (F3).** After a transformation, the lead's number uses the chart's measure (an index, not £m).
 4. **Emphasis (F4).** Colour and annotations fall on what the lead names, and the lead's numbers jump out (C10).
-5. **Still no overreach (F5).** Recheck L8 and L11 against the planned chart: no motive, no "most" or action the chart can't carry, no cause from a correlation.
+5. **Still no overreach (F5).** Recheck L8 and L11 against the planned chart: no motive, no "most" or action the chart can't carry, no cause from a correlation. A chart that covers only part of the set the lead names is a Stage 2 minor (D4), not overreach: don't raise it here.
 6. **Storyline or appendix (F6, minor).** A weak lead or a data table marks an appendix page, kept for Q&A. Say so if it applies.
 
 ## What to do with a failure

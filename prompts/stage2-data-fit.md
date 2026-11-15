@@ -1,4 +1,4 @@
-<!-- version: 1.2 · 16 Nov 2026 · draft for calibration run 2 (1.2: the source line is Stage 4; D7 for dummy charts only, Chris 16 Nov. 1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
+<!-- version: 1.3 · 16 Nov 2026 · draft for calibration run 2 (1.3: partial coverage is D4, minor, Chris 16 Nov. 1.2: the source line is Stage 4; D7 for dummy charts only, Chris 16 Nov. 1.1: answers the `declines` the app sends). Assembled after `persona.md` and `overlay-chart-makeover.md`; the function fills the double-brace placeholders. -->
 
 # Stage 2 — Data fit
 
@@ -26,7 +26,7 @@ Read the chart as drawn, then test it against the lead:
 4. The period the lead names, on both sides of any turning point (D5).
 5. Every number in the lead can be read off the chart or is annotated on it (D6), and is right (D10, hard stop).
 6. Only when `isDummy` is true or the page is marked illustrative: could the data realistically be obtained (D7)? For a chart of real data, D7 never applies.
-7. Minors: enough comparators to define normal (D4), robust to a different reasonable choice (D8), honest gaps (D9).
+7. Minors: enough comparators to define normal (D4), robust to a different reasonable choice (D8), honest gaps (D9). A chart that covers only part of the set the lead names (five of ASEAN's ten markets for "fastest in ASEAN") is D4, minor, on its own: don't group it with D1 or raise it as a major.
 
 **Logic first.** Say nothing about chart type, colours, labels, legends, titles, typos or the source line. Those come in Stages 3 and 4, even if they are glaring. That includes who or what the source line names: don't question the data's credibility from its source here (a Gen AI source is a Stage 4 hard stop). Judge the data as given.
 
