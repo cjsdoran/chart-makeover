@@ -1,7 +1,9 @@
 // The model-call cores (spec §7): what each function sends and how it reads the reply. The
 // functions use `finish`; the read test and the pilot harness call `read` in-process.
-import { taskSystemPrompt } from './prompts.mjs';
+import { stageSystemPrompt, taskSystemPrompt } from './prompts.mjs';
+import { checkReview } from '../../shared/reviewCheck.js';
 import { checkSchema, parseModelJson, schemaText } from '../../shared/schemaCheck.js';
+import { config } from '../../shared/limits.js';
 
 const INVALID_JSON = 'Your reply was not a single valid JSON object. Return only the JSON object.';
 
@@ -111,6 +113,73 @@ export function readChartStage(body) {
       const r = read(text);
       if (!r.ok) return { type: 'invalid', errors: r.errors };
       return { type: 'result', reading: r.data };
+    },
+  };
+}
+
+// ---------- Stage reviews (spec §4, §6, §7) ----------
+
+/** Fills the fields a review may leave out when they are empty (D24). */
+export function fillReview(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data;
+  const out = { ...data };
+  for (const [k, v] of Object.entries({ findings: [], declineResponses: [], whatWorks: null, offeredLead: null, route: null, reopenStage: null, impression: null })) {
+    if (out[k] === undefined || (Array.isArray(v) && out[k] === null)) out[k] = v;
+  }
+  return out;
+}
+
+/**
+ * The user message for a review (D6): the 1,600 px image block when the stage sends one, then the
+ * input as one JSON text block, then any <previous_errors>.
+ */
+export function reviewContent(body) {
+  const { image, ...input } = body.input;
+  const errors = cleanErrors(body.previousErrors);
+  const text = JSON.stringify({ stage: body.stage, round: body.round, ...input, ...(image ? { image: 'attached above: the chart as uploaded' } : {}) }, null, 2)
+    + (errors.length ? `\n\n<previous_errors>\n${errors.map((e) => `- ${e}`).join('\n')}\n</previous_errors>` : '');
+  if (!image) return text;
+  return [
+    { type: 'image', source: { type: 'base64', media_type: image.mediaType, data: image.base64 } },
+    { type: 'text', text },
+  ];
+}
+
+export const REVIEW_CUT_OFF = 'Your last reply was cut off at the length limit. Keep the same findings, each issue and fix to one sentence, and the message to about 100 words.';
+
+/**
+ * One stage review (spec §7): the stage's system prompt, one call, then parse, fill, schema and
+ * the review check. `read(text)` gives `{ ok, data, fixes }` or `{ ok: false, errors, fixes }`.
+ */
+export function reviewStage(body) {
+  const prompt = stageSystemPrompt(body.stage, schemaText('stage-review'));
+  const request = { stage: body.stage, round: body.round, input: body.input };
+  let fixes = [];
+  const read = (text) => {
+    fixes = [];
+    const r = readReply(text, {
+      schema: 'stage-review',
+      fill: fillReview,
+      check: (data) => {
+        const c = checkReview(data, request);
+        fixes = c.fixes;
+        if (c.ok) Object.assign(data, c.data);
+        return c;
+      },
+    });
+    return { ...r, fixes };
+  };
+  return {
+    call: `stage${body.stage}`,
+    system: prompt.text,
+    content: reviewContent(body),
+    promptVersion: prompt.version,
+    truncatedError: REVIEW_CUT_OFF,
+    read,
+    finish(text) {
+      const r = read(text);
+      if (!r.ok) return { type: 'invalid', errors: r.errors, fixes: r.fixes };
+      return { type: 'result', data: r.data, rulesVersion: config.rulesVersion ?? null, fixes: r.fixes.map((f) => f.type) };
     },
   };
 }

@@ -75,7 +75,9 @@ export function collectStudentText(body) {
     input.lead,
     input.readingCorrection,
     input.comparison,
+    input.comparison?.other,
     ...(Array.isArray(input.dataToSource) ? input.dataToSource : []),
+    ...(Array.isArray(input.declines) ? input.declines.map((d) => d?.reason) : []),
   ];
   return pieces.filter((v) => typeof v === 'string').join('\n');
 }

@@ -54,6 +54,8 @@ export function checkTextLimits(body) {
     || over(input.lead, limits.leadMaxChars)
     || over(input.readingCorrection, limits.correctionMaxChars)
     || over(input.comparison, limits.comparisonMaxChars)
+    || over(input.comparison?.other, limits.comparisonMaxChars)
+    || (Array.isArray(input.declines) && input.declines.some((d) => over(d?.reason, limits.declineReasonMaxChars)))
     || list(input.dataToSource, limits.dataToSourceMaxChars)
     || (input.history !== undefined && JSON.stringify(input.history).length > limits.historyMaxChars)
   ) return tooLarge();
@@ -106,11 +108,12 @@ export async function guard(req, opts = {}) {
 
 // Logs metadata only, never student content or findings (spec §12): the error code, and for
 // CM-S01 the name of the missing environment variable.
-export function logCall({ endpoint, round = null, startedAt, outcome, attempt = null, inputTokens = null, outputTokens = null, missing }) {
+export function logCall({ endpoint, round = null, startedAt, outcome, attempt = null, inputTokens = null, outputTokens = null, missing, fixes }) {
   const durationMs = Date.now() - startedAt;
   const code = codeForOutcome(outcome);
   console.log(JSON.stringify({
     ts: 'call', endpoint, ...(round ? { round } : {}), durationMs, inputTokens, outputTokens, attempt, outcome, code,
     ...(missing ? { missing } : {}),
+    ...(fixes?.length ? { fixes } : {}),
   }));
 }

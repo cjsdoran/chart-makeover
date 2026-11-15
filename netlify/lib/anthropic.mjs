@@ -139,6 +139,7 @@ export async function respondWithModel({ call, endpoint, round = null, system, c
       send({ type: 'meta', promptVersion });
       let outcome = 'ok';
       let tokens = {};
+      let fixes;
       try {
         const reply = await callModel({ call, system, content, startedAt });
         if (!reply.ok && reply.error === 'truncated' && truncatedError) {
@@ -156,6 +157,8 @@ export async function respondWithModel({ call, endpoint, round = null, system, c
           } catch {
             event = { type: 'invalid', errors: ['Your output could not be read. Return only the JSON object.'] };
           }
+          // Review-check fixes go to the log by type only (spec §12).
+          fixes = event.fixes?.map((f) => (typeof f === 'string' ? f : f.type));
           if (event.type === 'invalid') {
             outcome = 'invalid';
             send({ type: 'invalid', errors: event.errors });
@@ -165,7 +168,7 @@ export async function respondWithModel({ call, endpoint, round = null, system, c
         }
       } finally {
         clearInterval(pinger);
-        log({ outcome, inputTokens: tokens.inputTokens ?? null, outputTokens: tokens.outputTokens ?? null });
+        log({ outcome, inputTokens: tokens.inputTokens ?? null, outputTokens: tokens.outputTokens ?? null, ...(fixes?.length ? { fixes } : {}) });
         controller.close();
       }
     },

@@ -125,6 +125,10 @@ Built and passing (`npm test`): T-SET-1, T-SU-1, T-SU-2 (stored; Stage 2/4/redra
 
 Built and passing: T-ENG-1..14 (`tests/unit/engine.test.js`, on canned review JSON, no model), T-CHAT-1..8 (`tests/unit/chat.test.jsx`; T-CHAT-7 now covers the review call too). The click-through (lead → offer → reading → checklist with decline, name the data, push-back → comparison → polish → planned page → reopen Chart choice → confirm → Changes) was checked in the browser pane on `src/engine/canned.js`, desktop and phone width. RT-1 passed 10/10 (read prompt 1.1).
 
+### Milestone 4 status (15 Nov 2026)
+
+Built and passing: T-REV-1 (stage prompt assembly: persona, overlay, stage prompt, each stage's rule table, L8/L11 for Stage 5, the schema), T-REV-2 (strip-and-log fixes, including the grouped-severity floor, D50), T-REV-3 (regeneration: more than three blocking findings, over 150 words, a score, a missing decline response, a lead rewrite before round 3), T-REV-4 (`/api/review`: result with versions and fix types, invalid then retry with previousErrors, omitted fields, bad bodies, size), and the pilot judge (`tests/unit/pilot.test.mjs`). P-1 ran live on 15 Nov 2026: `pilot/run-2026-11-15-stage1/report.md` (6 of 10; misses taken to Chris).
+
 ## 3. Real-model checks (only when Chris asks)
 
 | ID | Check | Pass |
