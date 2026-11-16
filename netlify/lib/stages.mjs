@@ -2,7 +2,8 @@
 // functions use `finish`; the read test and the pilot harness call `read` in-process.
 import { stageSystemPrompt, taskSystemPrompt } from './prompts.mjs';
 import { checkReview, floorSeverity } from '../../shared/reviewCheck.js';
-import { checkSchema, parseModelJson, schemaText } from '../../shared/schemaCheck.js';
+import { checkRedraw, checkRedrawChart, mergeRedraw } from '../../shared/redrawCheck.js';
+import { REDRAW_PARTS, checkSchema, parseModelJson, schemaText } from '../../shared/schemaCheck.js';
 import { config } from '../../shared/limits.js';
 
 const INVALID_JSON = 'Your reply was not a single valid JSON object. Return only the JSON object.';
@@ -186,6 +187,119 @@ export function reviewStage(body) {
       const r = read(text);
       if (!r.ok) return { type: 'invalid', errors: r.errors, fixes: r.fixes };
       return { type: 'result', data: r.data, rulesVersion: config.rulesVersion ?? null, fixes: r.fixes.map((f) => f.type) };
+    },
+  };
+}
+
+// ---------- The redraw plan (spec §9.1, CM-8) ----------
+
+/** Fills the fields a redraw plan may leave out when they are empty (D24). */
+export function fillRedraw(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data;
+  const out = { ...data };
+  for (const [k, v] of Object.entries({ reason: null, chart: null, table: null, leadNumbers: [], annotations: [], referenceLines: [] })) {
+    if (out[k] === undefined || (Array.isArray(v) && out[k] === null)) out[k] = v;
+  }
+  if (out.redrawable === false) {
+    out.subheading ??= '';
+    out.source ??= 'Source: [to add]';
+    out.notes ??= { agreedLead: '', acceptedFixes: [], declinedFixes: [], dataToSource: [] };
+  }
+  if (out.notes && typeof out.notes === 'object') {
+    out.notes = { acceptedFixes: [], declinedFixes: [], dataToSource: [], ...out.notes };
+  }
+  if (out.chart && typeof out.chart === 'object') {
+    const c = { dataLabels: 'none', sort: 'none', joinInTimeOrder: false, quadrants: null, numberFormat: '0', ...out.chart };
+    // A category chart may give each series `values`, one per category (D77): expanded to points here,
+    // so everything after the schema sees points only.
+    if (Array.isArray(c.series)) {
+      c.series = c.series.map((s) => {
+        if (!s || typeof s !== 'object') return s;
+        const { values, ...rest } = s;
+        const points = Array.isArray(values) && Array.isArray(c.categories) && !(Array.isArray(s.points) && s.points.length)
+          ? c.categories.map((x, i) => ({ x, y: typeof values[i] === 'number' ? values[i] : null }))
+          : s.points ?? [];
+        return { illustrative: false, cagr: null, ...rest, points };
+      });
+    }
+    if (c.categoryAxis && typeof c.categoryAxis === 'object') c.categoryAxis = { title: null, min: null, max: null, shown: true, ...c.categoryAxis };
+    if (c.valueAxis && typeof c.valueAxis === 'object') c.valueAxis = { title: null, min: null, max: null, log: false, shown: true, ...c.valueAxis };
+    out.chart = c;
+  }
+  return out;
+}
+
+/** A part's fields after filling (D24): the part's own, plus whatever else the model sent (so the schema still catches it). */
+export function fillRedrawPart(data, part) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data;
+  const filled = fillRedraw(data);
+  const keep = new Set([...REDRAW_PARTS[part], ...Object.keys(data)]);
+  return Object.fromEntries(Object.entries(filled).filter(([k]) => keep.has(k)));
+}
+
+/**
+ * The user message for one of the plan's calls (D6, D80): the part, the input and, for the second,
+ * the chart the first planned, as one JSON text block; then any <previous_errors>.
+ */
+export function redrawContent(body) {
+  const errors = cleanErrors(body.previousErrors);
+  const message = { part: body.part, ...body.input, ...(body.part === 'finish' ? { plannedChart: body.plannedChart } : {}) };
+  return JSON.stringify(message, null, 2)
+    + (errors.length ? `\n\n<previous_errors>\n${errors.map((e) => `- ${e}`).join('\n')}\n</previous_errors>` : '');
+}
+
+export const REDRAW_CUT_OFF = 'Your last reply was cut off at the length limit. Keep every category and series, but labels only where the slide shows them, and one short line per note.';
+
+/**
+ * One of the redraw plan's two calls (spec §9.1, D80). `part: 'chart'` plans the chart and returns
+ * it checked; `part: 'finish'` adds the lead numbers, annotations, reference lines and notes to the
+ * chart the first call planned (`plannedChart`) and returns the whole slide, checked.
+ */
+export function redrawPlanStage(body) {
+  const part = body.part === 'finish' ? 'finish' : 'chart';
+  const prompt = taskSystemPrompt('redraw-plan');
+  const schema = part === 'chart' ? 'redraw-chart' : 'redraw-finish';
+  let fixes = [];
+  let spec = null;
+  const read = (text) => {
+    fixes = [];
+    spec = null;
+    const r = readReply(text, {
+      schema,
+      fill: (d) => fillRedrawPart(d, part),
+      check: (data) => {
+        if (part === 'chart') {
+          const c = checkRedrawChart(data);
+          fixes = c.fixes;
+          if (c.ok) Object.assign(data, c.data);
+          return c;
+        }
+        const merged = mergeRedraw(String(body.input.lead ?? ''), body.plannedChart, data);
+        const valid = checkSchema('redraw-spec', merged);
+        if (!valid.ok) return { ok: false, errors: valid.errors.map((e) => `Schema: ${e}.`) };
+        const c = checkRedraw(merged, body.input);
+        fixes = c.fixes;
+        if (c.ok) spec = c.data;
+        return c;
+      },
+    });
+    return { ...r, fixes, ...(spec ? { spec } : {}) };
+  };
+  const fence = '```';
+  return {
+    call: 'redrawPlan',
+    part,
+    system: `${prompt.text}\n\n${fence}json\n${schemaText(schema)}\n${fence}`
+      + `\n\nThis call is part "${part}": return only the properties in the schema above. Use exactly its property names, no others, and every required property. If the message ends with <previous_errors>, your last reply failed those checks: return a corrected JSON object.`,
+    content: redrawContent({ ...body, part }),
+    promptVersion: prompt.version,
+    truncatedError: REDRAW_CUT_OFF,
+    read,
+    finish(text) {
+      const r = read(text);
+      if (!r.ok) return { type: 'invalid', errors: r.errors, fixes: r.fixes };
+      const types = r.fixes.map((f) => f.type);
+      return part === 'chart' ? { type: 'result', part, chart: r.data, fixes: types } : { type: 'result', part, spec: r.spec, fixes: types };
     },
   };
 }

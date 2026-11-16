@@ -1,0 +1,185 @@
+{
+  "readable": true,
+  "unreadableReason": null,
+  "kind": "data",
+  "texts": {
+    "title": "Our margin per tonne has halved since 2021, from HK$1,200 to HK$600: push price rises in the 2026 contract round",
+    "subheading": "PRICE AND UNIT COST PER TONNE, 2019–2025, HK$",
+    "chartTitle": null,
+    "source": "Source: Pearl River Packaging finance, 2019–25 annual accounts",
+    "illustrativeLabel": false,
+    "other": [
+      {
+        "text": "Average price",
+        "where": "right of chart, upper series label at y=140",
+        "pt": 16
+      },
+      {
+        "text": "Unit cost",
+        "where": "right of chart, lower series label at y=184",
+        "pt": 16
+      },
+      {
+        "text": "2019, 2020, 2021, 2022, 2023, 2024, 2025",
+        "where": "x-axis tick labels",
+        "pt": 16
+      },
+      {
+        "text": "y-axis tick labels, format #,##0, 0 to 8,000",
+        "where": "left axis",
+        "pt": 16
+      }
+    ]
+  },
+  "chart": {
+    "type": "line",
+    "orientation": "vertical",
+    "stacking": "none",
+    "is3D": false,
+    "dualAxis": false,
+    "panels": 1,
+    "logScale": false,
+    "logLabelled": false,
+    "sorted": "n/a",
+    "categories": [
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "series": [
+      {
+        "name": "Average price",
+        "colour": "033D93",
+        "values": [
+          {
+            "x": "2019",
+            "y": 6800,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2020",
+            "y": 6900,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2021",
+            "y": 7100,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2022",
+            "y": 7300,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2023",
+            "y": 7350,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2024",
+            "y": 7400,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2025",
+            "y": 7450,
+            "size": null,
+            "label": null
+          }
+        ],
+        "labelledDirectly": true,
+        "axis": "primary"
+      },
+      {
+        "name": "Unit cost",
+        "colour": "C00000",
+        "values": [
+          {
+            "x": "2019",
+            "y": 5700,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2020",
+            "y": 5800,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2021",
+            "y": 5900,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2022",
+            "y": 6500,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2023",
+            "y": 6700,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2024",
+            "y": 6800,
+            "size": null,
+            "label": null
+          },
+          {
+            "x": "2025",
+            "y": 6850,
+            "size": null,
+            "label": null
+          }
+        ],
+        "labelledDirectly": true,
+        "axis": "primary"
+      }
+    ],
+    "axes": [
+      {
+        "axis": "x",
+        "title": null,
+        "unit": null,
+        "min": null,
+        "max": null,
+        "shown": true
+      },
+      {
+        "axis": "y",
+        "title": null,
+        "unit": "HK$",
+        "min": 0,
+        "max": 8000,
+        "shown": true
+      }
+    ],
+    "referenceLines": [],
+    "annotations": [],
+    "gridlines": false,
+    "legend": false,
+    "dataLabels": "none"
+  },
+  "table": null,
+  "emphasis": "Two lines, the blue average price above the red unit cost, with the gap between them narrowing visibly from 2021 to 2022.",
+  "smallestTextPt": 12,
+  "valuesSource": "file",
+  "uncertain": [],
+  "summary": "I read this as average price and unit cost per tonne, 2019 to 2025, in HK$."
+}

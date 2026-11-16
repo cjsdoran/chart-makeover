@@ -1,17 +1,18 @@
 import { config } from '../../shared/limits.js';
 import { formatTime } from '../time.js';
 import { PlannedPage, ReviewAttachments } from './Findings.jsx';
+import { RedrawCard } from './Changes.jsx';
 
 /**
  * The chat thread (CM-7): Daniel's messages on the left, the student's turns on the right, and the
  * fix checklists as cards under the message that raised them. `session` and `act` are needed only
  * for the stage messages; the set-up chat renders with `messages` alone.
  */
-export function ChatView({ messages, session, act, onUseOffer }) {
+export function ChatView({ messages, session, act, onUseOffer, redraw }) {
   return (
     <ol className="chat" aria-label="Conversation with Daniel">
       {messages.map((m) => (
-        <li key={m.id} className={`msg ${m.from}${m.kind === 'review' || m.kind === 'plannedPage' ? ' wide' : ''}`}>
+        <li key={m.id} className={`msg ${m.from}${m.kind === 'review' || m.kind === 'plannedPage' || m.kind === 'redraw' ? ' wide' : ''}`}>
           <span className="who">
             {m.from === 'daniel' ? config.em.name : 'You'}
             {m.at && <span className="when"> · <span className="mono">{formatTime(m.at)}</span></span>}
@@ -22,6 +23,7 @@ export function ChatView({ messages, session, act, onUseOffer }) {
           {m.text && m.text.split('\n').map((line, i) => <p key={i}>{line}</p>)}
           {m.kind === 'review' && session && <ReviewAttachments message={m} session={session} act={act} onUseOffer={onUseOffer} />}
           {m.kind === 'plannedPage' && <PlannedPage page={m.page} />}
+          {m.kind === 'redraw' && session && <RedrawCard session={session} index={m.redraw} redraw={redraw} />}
         </li>
       ))}
     </ol>

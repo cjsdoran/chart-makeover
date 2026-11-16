@@ -56,6 +56,7 @@ export function checkTextLimits(body) {
     || over(input.comparison, limits.comparisonMaxChars)
     || over(input.comparison?.other, limits.comparisonMaxChars)
     || (Array.isArray(input.declines) && input.declines.some((d) => over(d?.reason, limits.declineReasonMaxChars)))
+    || (Array.isArray(input.declinedFixes) && input.declinedFixes.some((d) => over(d?.reason, limits.declineReasonMaxChars)))
     || list(input.dataToSource, limits.dataToSourceMaxChars)
     || (input.history !== undefined && JSON.stringify(input.history).length > limits.historyMaxChars)
   ) return tooLarge();

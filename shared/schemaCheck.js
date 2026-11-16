@@ -5,10 +5,22 @@ import readChartSchema from '../schemas/read-chart.json' with { type: 'json' };
 import stageReviewSchema from '../schemas/stage-review.json' with { type: 'json' };
 import redrawSpecSchema from '../schemas/redraw-spec.json' with { type: 'json' };
 
+// The redraw plan is made in two calls (spec D80); each returns part of redraw-spec.json.
+const part = (id, keys) => ({
+  ...redrawSpecSchema, $id: id, required: keys,
+  properties: Object.fromEntries(keys.map((k) => [k, redrawSpecSchema.properties[k]])),
+});
+export const REDRAW_PARTS = {
+  chart: ['redrawable', 'reason', 'subheading', 'chart', 'table', 'source'],
+  finish: ['leadNumbers', 'annotations', 'referenceLines', 'notes'],
+};
+
 const SCHEMAS = {
   'read-chart': readChartSchema,
   'stage-review': stageReviewSchema,
   'redraw-spec': redrawSpecSchema,
+  'redraw-chart': part('redraw-chart.json', REDRAW_PARTS.chart),
+  'redraw-finish': part('redraw-finish.json', REDRAW_PARTS.finish),
 };
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });

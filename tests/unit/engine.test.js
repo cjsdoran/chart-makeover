@@ -426,13 +426,13 @@ describe('T-ENG-13: Stage 5 reopen', () => {
     expect(reviewRequest(s).input.plannedPage.lead).toBe('A sharper lead');
   });
 
-  it('confirming a passing check opens Changes, with the dummy-chart line when the values are illustrative', () => {
+  it("confirming a passing check opens Changes; Daniel's last line waits for the first slide (spec §9.2)", () => {
     let s = applyReview(atFit(), review(5));
     s = { ...s, run: { ...s.run, isDummy: true } };
     s = ok(confirmFit(s));
     expect(s.run.stages[5].status).toBe('passed');
     expect(s.step).toBe('changes');
-    expect(s.chat.at(-1).text).toBe(config.openers.lastMessage);
+    expect(s.chat.some((m) => m.text === config.openers.lastMessage)).toBe(false);
   });
 });
 

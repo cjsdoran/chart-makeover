@@ -17,6 +17,11 @@ const BLOCKING = new Set(['hardStop', 'major']);
 export const ENGINE_MESSAGES = {
   sameLead: config.messages.sameLead,
   movedOn: "We've used the rounds for this stage, so we'll move on. Your record lists what's still open.",
+  redrawn: (file) => `Here's the slide: ${file}. It has your lead and only the fixes you accepted.`,
+  rebuilt: (n, file) => `Version ${n} of the slide: ${file}. It has your lead and the fixes you accept now.`,
+  notRedrawable: (reason) => `I can't build this one as a slide: ${reason} Your record has the critique.`,
+  changing: 'I want to change my choices.',
+  buildAgain: 'Build it again with my new choices.',
   confirmed: 'Good. The page is agreed: you can make the changes.',
 };
 
@@ -53,6 +58,10 @@ export function engineFields() {
     // { stage, review }: route buttons are showing (spec §5.6).
     route: null,
     awaitingReupload: false,
+    // Make these changes (spec §9): each version built, the student changing choices, a concept chart's reason.
+    redraws: [],
+    editingChoices: false,
+    notRedrawable: null,
     // Engine log: verdict mismatches, stripped fields, converted push-backs (pilot P-2 reports them).
     log: [],
   };
@@ -208,7 +217,7 @@ export function reviewRequest(session) {
  * namespaced findings, the engine's verdict, the offer rule, decline responses, routes and
  * Stage 5's reopen suggestion. Then the gate is checked.
  */
-export function applyReview(session, review, { now } = {}) {
+export function applyReview(session, review, { now, meta = null } = {}) {
   const run = session.run;
   const pending = run.pending;
   if (!pending) throw new Error('No review is due.');
@@ -313,6 +322,8 @@ export function applyReview(session, review, { now } = {}) {
     message: review.message, whatWorks: verdict === 'hardStop' ? null : (review.whatWorks ?? null),
     offeredLead, route, reopenStage, impression, ...(stage === 1 ? { leadRound: run.leads.length } : {}),
     ...(pending.leadChanged ? { leadChanged: true } : {}),
+    // For the record (CM-11): the prompt and rules versions and the model that answered.
+    ...(meta ? { promptVersion: meta.promptVersion ?? null, rulesVersion: meta.rulesVersion ?? null, servedBy: meta.servedBy ?? null } : {}),
   };
   const reviewIndex = run.reviews.length;
   let next = patchRun(session, {
@@ -622,7 +633,6 @@ export function confirmFit(session, { now } = {}) {
   const status = openBlocking(run, 5).length ? 'cappedOpen' : 'passed';
   let next = patchRun(session, { stages: setStage(run, 5, { status }), route: null });
   next = addChat(next, student('The page works.', { kind: 'confirm' }, now), daniel(ENGINE_MESSAGES.confirmed, { kind: 'confirmed' }, now));
-  if (run.isDummy) next = addChat(next, daniel(config.openers.lastMessage, { kind: 'lastMessage' }, now));
   return { session: { ...next, step: 'changes' } };
 }
 
@@ -639,3 +649,99 @@ export function trackerStatus(session, n) {
   return 'toDo';
 }
 
+
+// ---------- Make these changes (CM-8, spec §9) ----------
+
+/** The /api/redraw-plan input (spec §9.1): the planned page with the reading it rests on. */
+export function redrawRequest(session) {
+  const run = session.run;
+  const page = plannedPage(run);
+  const upload = activeUpload(run);
+  const c = run.comparison;
+  return {
+    input: {
+      lead: page.lead ?? run.leads.at(-1)?.text ?? '',
+      audience: run.audience,
+      comparison: c ? (c.type === 'other' ? c.other : c.type) : null,
+      reading: upload?.reading ?? null,
+      readingCorrection: upload?.readingCorrection ?? null,
+      acceptedFixes: page.acceptedFixes.map(({ stage, rules, location, fix }) => ({ stage, rules, location, fix })),
+      declinedFixes: page.declinedFixes.map(({ stage, rules, location, fix, reason }) => ({ stage, rules, location, fix, reason })),
+      dataToSource: page.dataToSource,
+      isDummy: Boolean(run.isDummy),
+    },
+  };
+}
+
+/**
+ * A plan has come back (spec §9.2): a new version is kept with what it applied, and Daniel says so.
+ * The first version is followed by Daniel's last message (PRD). A concept chart (redrawable false)
+ * gets Daniel's reason and no download.
+ */
+export function applyRedraw(session, result, { now, fileName } = {}) {
+  const run = session.run;
+  if (session.step !== 'changes') return { error: 'Finish the fit check first.' };
+  const spec = result.spec;
+  if (!spec.redrawable) {
+    const next = patchRun(session, { notRedrawable: spec.reason, editingChoices: false });
+    return { session: addChat(next, daniel(ENGINE_MESSAGES.notRedrawable(spec.reason), { kind: 'notRedrawable' }, now)) };
+  }
+  const page = plannedPage(run);
+  const version = {
+    version: run.redraws.length + 1,
+    at: stamp(now),
+    fileName,
+    spec,
+    acceptedFixes: page.acceptedFixes,
+    declinedFixes: page.declinedFixes,
+    dataToSource: page.dataToSource,
+    promptVersion: result.promptVersion ?? null,
+    servedBy: result.servedBy ?? null,
+  };
+  let next = patchRun(session, { redraws: [...run.redraws, version], editingChoices: false });
+  const text = version.version === 1 ? ENGINE_MESSAGES.redrawn(fileName) : ENGINE_MESSAGES.rebuilt(version.version, fileName);
+  next = addChat(next, daniel(text, { kind: 'redraw', redraw: run.redraws.length }, now));
+  if (version.version === 1) next = addChat(next, daniel(config.openers.lastMessage, { kind: 'lastMessage' }, now));
+  return { session: next };
+}
+
+/** The fixes the student can change after the fit check: every Stage 2–5 fix still standing. */
+export function changeableFindings(run) {
+  return [2, 3, 4, 5].flatMap((s) => stageFindings(run, s)).filter((f) => f.status !== 'superseded' && f.resolution !== 'nameData');
+}
+
+/** Change my choices (spec §9.2): the checklists reopen for accept or decline only; no new review. */
+export function startChangingChoices(session, { now } = {}) {
+  if (session.endedAt) return { error: 'This run has ended.' };
+  if (session.step !== 'changes' || !session.run.redraws.length || session.run.editingChoices) return { error: 'Build the slide first.' };
+  return { session: addChat(patchRun(session, { editingChoices: true }), student(ENGINE_MESSAGES.changing, { kind: 'changing' }, now)) };
+}
+
+/**
+ * Accept or decline one fix while changing choices. A blocking fix declined needs a reason; a minor
+ * one is simply left out. The change is the student's: Daniel doesn't answer it (no call).
+ */
+export function changeChoice(session, id, choice, reason = '') {
+  const run = session.run;
+  const f = run.findings[id];
+  if (!run.editingChoices) return { error: 'Choose Change my choices first.' };
+  if (!f || !changeableFindings(run).some((x) => x.id === id)) return { error: 'No such fix.' };
+  let change;
+  if (choice === 'accept') change = { status: 'accepted', changedAfterFit: true };
+  else if (choice === 'decline') {
+    if (!isBlocking(f)) change = { status: 'open', changedAfterFit: true };
+    else {
+      const text = String(reason ?? '').trim();
+      if (text.length < caps.declineReasonMinChars) return { error: `Give a reason of at least ${caps.declineReasonMinChars} characters.` };
+      if (text.length > limits.declineReasonMaxChars) return { error: `Keep the reason to ${limits.declineReasonMaxChars} characters or fewer.` };
+      change = { status: 'closed', reason: text, finalChoice: 'keep', changedAfterFit: true };
+    }
+  } else return { error: 'Choose Accept or Decline.' };
+  return { session: patchRun(session, { findings: { ...run.findings, [id]: { ...f, ...change } } }) };
+}
+
+/** Build again: the student's turn before the next plan call. */
+export function buildAgain(session, { now } = {}) {
+  if (!session.run.editingChoices) return { error: 'Choose Change my choices first.' };
+  return { session: addChat(session, student(ENGINE_MESSAGES.buildAgain, { kind: 'buildAgain' }, now)) };
+}

@@ -1,0 +1,335 @@
+{
+  "readable": true,
+  "unreadableReason": null,
+  "kind": "data",
+  "texts": {
+    "title": "Marketing Spend vs Online Sales",
+    "subheading": null,
+    "chartTitle": null,
+    "source": "Source: Shopify export; marketing ledger",
+    "illustrativeLabel": false,
+    "other": [
+      {
+        "text": "Marketing spend (HK$m)",
+        "where": "legend, top centre, blue square",
+        "pt": null
+      },
+      {
+        "text": "Online sales (HK$m)",
+        "where": "legend, top centre, red line",
+        "pt": null
+      },
+      {
+        "text": "Marketing spend (HK$m)",
+        "where": "left y-axis title, rotated",
+        "pt": null
+      },
+      {
+        "text": "Online sales (HK$m)",
+        "where": "right y-axis title, rotated",
+        "pt": null
+      },
+      {
+        "text": "0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0",
+        "where": "left y-axis tick labels",
+        "pt": null
+      },
+      {
+        "text": "0, 5, 10, 15, 20, 25, 30",
+        "where": "right y-axis tick labels",
+        "pt": null
+      },
+      {
+        "text": "Jan 2024 … Dec 2025 (monthly)",
+        "where": "x-axis tick labels, angled",
+        "pt": null
+      }
+    ]
+  },
+  "chart": {
+    "type": "combo",
+    "orientation": "vertical",
+    "stacking": "none",
+    "is3D": false,
+    "dualAxis": true,
+    "panels": 1,
+    "logScale": false,
+    "logLabelled": false,
+    "sorted": "none",
+    "categories": [
+      "Jan 2024",
+      "Feb 2024",
+      "Mar 2024",
+      "Apr 2024",
+      "May 2024",
+      "Jun 2024",
+      "Jul 2024",
+      "Aug 2024",
+      "Sep 2024",
+      "Oct 2024",
+      "Nov 2024",
+      "Dec 2024",
+      "Jan 2025",
+      "Feb 2025",
+      "Mar 2025",
+      "Apr 2025",
+      "May 2025",
+      "Jun 2025",
+      "Jul 2025",
+      "Aug 2025",
+      "Sep 2025",
+      "Oct 2025",
+      "Nov 2025",
+      "Dec 2025"
+    ],
+    "series": [
+      {
+        "name": "Marketing spend (HK$m)",
+        "colour": "blue",
+        "values": [
+          {
+            "x": "Jan 2024",
+            "y": 0.8
+          },
+          {
+            "x": "Feb 2024",
+            "y": 0.8
+          },
+          {
+            "x": "Mar 2024",
+            "y": 0.9
+          },
+          {
+            "x": "Apr 2024",
+            "y": 0.9
+          },
+          {
+            "x": "May 2024",
+            "y": 1
+          },
+          {
+            "x": "Jun 2024",
+            "y": 1
+          },
+          {
+            "x": "Jul 2024",
+            "y": 1.1
+          },
+          {
+            "x": "Aug 2024",
+            "y": 1.1
+          },
+          {
+            "x": "Sep 2024",
+            "y": 1.2
+          },
+          {
+            "x": "Oct 2024",
+            "y": 1.3
+          },
+          {
+            "x": "Nov 2024",
+            "y": 1.4
+          },
+          {
+            "x": "Dec 2024",
+            "y": 1.4
+          },
+          {
+            "x": "Jan 2025",
+            "y": 1.5
+          },
+          {
+            "x": "Feb 2025",
+            "y": 1.5
+          },
+          {
+            "x": "Mar 2025",
+            "y": 1.6
+          },
+          {
+            "x": "Apr 2025",
+            "y": 1.6
+          },
+          {
+            "x": "May 2025",
+            "y": 1.7
+          },
+          {
+            "x": "Jun 2025",
+            "y": 1.8
+          },
+          {
+            "x": "Jul 2025",
+            "y": 1.8
+          },
+          {
+            "x": "Aug 2025",
+            "y": 1.9
+          },
+          {
+            "x": "Sep 2025",
+            "y": 2.1
+          },
+          {
+            "x": "Oct 2025",
+            "y": 2.2
+          },
+          {
+            "x": "Nov 2025",
+            "y": 2.4
+          },
+          {
+            "x": "Dec 2025",
+            "y": 2.6
+          }
+        ],
+        "labelledDirectly": false,
+        "axis": "primary"
+      },
+      {
+        "name": "Online sales (HK$m)",
+        "colour": "red",
+        "values": [
+          {
+            "x": "Jan 2024",
+            "y": 9.1
+          },
+          {
+            "x": "Feb 2024",
+            "y": 8.4
+          },
+          {
+            "x": "Mar 2024",
+            "y": 9.6
+          },
+          {
+            "x": "Apr 2024",
+            "y": 9.9
+          },
+          {
+            "x": "May 2024",
+            "y": 10.4
+          },
+          {
+            "x": "Jun 2024",
+            "y": 10.1
+          },
+          {
+            "x": "Jul 2024",
+            "y": 9.8
+          },
+          {
+            "x": "Aug 2024",
+            "y": 10.6
+          },
+          {
+            "x": "Sep 2024",
+            "y": 11
+          },
+          {
+            "x": "Oct 2024",
+            "y": 12.3
+          },
+          {
+            "x": "Nov 2024",
+            "y": 17.6
+          },
+          {
+            "x": "Dec 2024",
+            "y": 19.2
+          },
+          {
+            "x": "Jan 2025",
+            "y": 11.8
+          },
+          {
+            "x": "Feb 2025",
+            "y": 11.2
+          },
+          {
+            "x": "Mar 2025",
+            "y": 12.6
+          },
+          {
+            "x": "Apr 2025",
+            "y": 12.9
+          },
+          {
+            "x": "May 2025",
+            "y": 13.4
+          },
+          {
+            "x": "Jun 2025",
+            "y": 13.1
+          },
+          {
+            "x": "Jul 2025",
+            "y": 12.8
+          },
+          {
+            "x": "Aug 2025",
+            "y": 13.9
+          },
+          {
+            "x": "Sep 2025",
+            "y": 15.8
+          },
+          {
+            "x": "Oct 2025",
+            "y": 18.4
+          },
+          {
+            "x": "Nov 2025",
+            "y": 26.1
+          },
+          {
+            "x": "Dec 2025",
+            "y": 28.8
+          }
+        ],
+        "labelledDirectly": false,
+        "axis": "secondary"
+      }
+    ],
+    "axes": [
+      {
+        "axis": "x",
+        "title": null,
+        "unit": null,
+        "min": null,
+        "max": null,
+        "shown": true
+      },
+      {
+        "axis": "y",
+        "title": "Marketing spend (HK$m)",
+        "unit": "HK$m",
+        "min": 0,
+        "max": 3,
+        "shown": true
+      },
+      {
+        "axis": "y2",
+        "title": "Online sales (HK$m)",
+        "unit": "HK$m",
+        "min": 0,
+        "max": 30,
+        "shown": true
+      }
+    ],
+    "referenceLines": [],
+    "annotations": [],
+    "gridlines": true,
+    "legend": true,
+    "dataLabels": "none"
+  },
+  "table": null,
+  "emphasis": "The eye goes first to the red sales line's spikes in Nov–Dec 2024 and Nov–Dec 2025 above the steadily rising blue bars.",
+  "smallestTextPt": null,
+  "valuesSource": "estimated",
+  "uncertain": [
+    "All values estimated from axes; online sales line values approximate to about ±0.5"
+  ],
+  "summary": "I read this as monthly marketing spend (bars, left axis) and online sales (line, right axis), Jan 2024 to Dec 2025, both in HK$m."
+}

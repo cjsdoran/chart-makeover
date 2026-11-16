@@ -9,6 +9,7 @@ import { ChatView } from './chat/ChatView.jsx';
 import { UploadCard } from './chat/UploadCard.jsx';
 import { StageInput } from './chat/StageInput.jsx';
 import { askDaniel } from './daniel/askDaniel.js';
+import { browserRedraw } from './redraw/browser.js';
 
 // Every stage review goes to /api/review (milestone 5). Tests pass their own review (canned.js).
 const defaultReview = (request, accessCode) => askDaniel('/api/review', request, accessCode);
@@ -89,7 +90,7 @@ export default function App({ storage = defaultStorage(), screens = {} }) {
   );
 }
 
-function StepScreen({ session, updateSession, screens }) {
+function StepScreen({ session, updateSession, screens, onNewRun }) {
   if (session.step === 'setup') return <SetupScreen session={session} updateSession={updateSession} check={screens.check} />;
   // Runs an engine function (src/engine/engine.js) on the session; returns its error, if any.
   const act = (fn, ...args) => {
@@ -100,12 +101,14 @@ function StepScreen({ session, updateSession, screens }) {
   };
   const useOffer = (text) => updateSession((s) => ({ draft: { ...(s.draft ?? {}), lead: text } }));
   const review = screens.review ?? defaultReview;
+  // Make these changes and the record (milestones 6–7); tests pass fakes.
+  const redraw = screens.redraw ?? browserRedraw;
   return (
     <section aria-label="Chat">
-      <ChatView messages={session.chat} session={session} act={act} onUseOffer={useOffer} />
+      <ChatView messages={session.chat} session={session} act={act} onUseOffer={useOffer} redraw={redraw} />
       {session.step === 'upload'
         ? <UploadCard session={session} updateSession={updateSession} deps={screens.upload} />
-        : <StageInput session={session} act={act} updateSession={updateSession} review={review} />}
+        : <StageInput session={session} act={act} updateSession={updateSession} review={review} redraw={redraw} onNewRun={onNewRun} />}
     </section>
   );
 }

@@ -126,8 +126,8 @@ body {
 
 /* Chat (CM-7): Daniel on the left, the student on the right */
 .pane { padding: var(--praxis-space-6) var(--praxis-space-4); max-width: 52rem; width: 100%; margin: 0 auto; flex: 1; }
-.chat { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--praxis-space-3); }
-.msg { max-width: 85%; border-radius: var(--praxis-radius); padding: var(--praxis-space-3) var(--praxis-space-4); }
+.chat { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--praxis-space-3); }
+.msg { max-width: 85%; min-width: 0; overflow-wrap: anywhere; border-radius: var(--praxis-radius); padding: var(--praxis-space-3) var(--praxis-space-4); }
 .msg p { margin: 0 0 var(--praxis-space-2); }
 .msg p:last-child { margin-bottom: 0; }
 .msg .who { display: block; font-size: var(--praxis-text-sm); font-weight: 600; margin-bottom: var(--praxis-space-1); }
@@ -167,3 +167,10 @@ body {
 .planned ol, .planned ul { margin: 0; padding-left: 1.25rem; }
 fieldset.field { border: 0; padding: 0; }
 fieldset .checkbox { margin: var(--praxis-space-1) 0; }
+
+/* Make these changes (CM-8): the preview under Daniel's message, the choice editor, the record. */
+.redraw { margin: var(--praxis-space-3) 0 0; }
+.redraw img { display: block; max-width: 100%; height: auto; border: 1px solid var(--praxis-grey-300, #c4cbd3); border-radius: var(--praxis-radius); background: #fff; }
+.redraw figcaption { color: var(--praxis-grey-700); font-size: var(--praxis-text-sm); margin-top: var(--praxis-space-2); }
+.choice-list { list-style: none; margin: var(--praxis-space-3) 0; padding: 0; display: grid; gap: var(--praxis-space-3); }
+.record-panel { margin-top: var(--praxis-space-6); overflow-wrap: anywhere; }

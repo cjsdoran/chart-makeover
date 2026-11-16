@@ -12,17 +12,20 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "rules:check": "node scripts/rules-from-prd.mjs --check",
-    "read-test": "node scripts/read-test.mjs"
+    "read-test": "node scripts/read-test.mjs",
+    "pilot-redraw": "node scripts/pilot-redraw.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.133.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
     "ajv": "8.20.0",
+    "chart.js": "4.6.1",
     "heic2any": "0.0.4",
     "jszip": "3.10.2",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
+    "pptxgenjs": "4.0.1",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },

@@ -133,6 +133,18 @@ Built and passing: T-REV-1 (stage prompt assembly: persona, overlay, stage promp
 
 Built and passing: every stage live through `/api/review`; the minor-fix wait (D59: T-ENG-7 and two new engine tests, T-CHAT-3 and T-CHAT-5 updated); the P-2 driver and judge (`tests/unit/pilot.test.mjs`, scripted replies on the real engine). P-2 ran live on 16 Nov 2026: `pilot/run-2026-11-16-chart/report.md`, 4 of 9 cases pass, 35 valid replies, slowest 17.8 s per call. But 9 replies were cut off at 1,600 tokens and retried, so 10 of 36 turns took over 20 s (worst 42.6 s), and C02's Stage 5 failed all three attempts on the score check. Misses taken to Chris.
 
+### Milestones 6–8 status (16 Nov 2026)
+
+Built and passing (`npm test`, 20 files; `npm run e2e`): T-RD-1..10 (`tests/unit/redraw.test.mjs`: the redraw check, `/api/redraw-plan` on a fake model, the .pptx unzipped and read for every kind, `valueToSlide`, the file name, the notes, changed choices and Build again, a concept chart, the Chart.js preview of every kind in Node), the Changes screen (`tests/unit/changes.test.jsx`: build, preview, download, change choices, a failed call, a concept chart, the record ending the run, a new run: T-SAV-3), T-REC-1..5 (`tests/unit/record.test.js`, text read back with pdf.js), T-E2E-1..2 (`tests/e2e/run.spec.js`, Playwright with every `/api` call mocked; both files download and open), and T-A11Y-1 inside T-E2E-1 (axe at setup, Stage 2, Changes, and Changes at 375 px with no sideways scroll). The P-3 harness replays saved P-2 runs to the planned page with no calls (`tests/unit/pilot-redraw.test.mjs`; skips where `pilot/` is absent, as it is git-ignored). Differences from §2:
+
+- T-RD-4: every kind was also opened in PowerPoint 365 and checked by eye on a test spec (spec D69); the unit test reopens each file with JSZip.
+- T-A11Y-1 covers setup, a chart stage and Changes; the record PDF has no axe check (it is a PDF, built from the same text).
+- T-E2E-1 uses the canned Stage 1 (four rounds, not two) and declines and pushes back in Stage 3, where the canned reviews do it.
+
+P-3 ran live on 16 Nov 2026 (`pilot/run-2026-11-16-redraw/report.md`, slides and PowerPoint renders beside it): 8 of 9 cases built and, after the layout fixes in spec D78, pass the style guide's QA list by eye; C01 has no plan inside the 24 s budget (spec D77, Q17). Plans took 10.6–21.7 s.
+
+P-3 rerun with the plan in two calls (spec D80, `pilot/run-2026-11-16-redraw-split/`): 9 of 9 cases, every call on its first attempt, 3.1–13.2 s per call, 20.6 s for the slowest case (C01); all nine slides pass the QA list by eye. The /api/redraw-plan tests cover both parts, the merged check, and the browser helper repeating only a failed second call.
+
 ## 3. Real-model checks (only when Chris asks)
 
 | ID | Check | Pass |
@@ -140,7 +152,7 @@ Built and passing: every stage live through `/api/review`; the minor-fix wait (D
 | RT-1 | **Read test** (milestone 2): `read-chart` on the ten inputs against `calibration/read-truth.json`: every `mustRead` string verbatim, `kind`, `chartType` (C06 waterfall or column; C09 bar or column), flags, `keyValues` within ±5% (±10% for the photo) | All ten; misses shown to Chris case by case |
 | P-1 | **Stage 1** (milestone 4): one round on each student lead; verdict and every Stage 1 `mustCatch` and `mustNot` in `expected.json` | 10 of 10, or each miss taken to Chris |
 | P-2 | **Chart stages** (milestones 5 and 8): Stages 2–5 with `agreedLead` or `pilotLead`, the simulated student accepting every fix; C08's route and re-upload path as `calibration/README.md` says | Every `mustCatch` at its stage and severity; no `mustNot`; no `globalMustNot` |
-| P-3 | **Redraw QA** (milestone 6): the .pptx for every case with chart stages, opened in PowerPoint and checked against the style guide's QA list (title position, subheading, nothing below 12 pt, nothing outside the body zone, slide number, notes, "Illustrative data") | All pass (Common Module "Redraw quality") |
+| P-3 | **Redraw QA** (milestone 6): the .pptx for every case with chart stages, opened in PowerPoint and checked against the style guide's QA list (title position, subheading, nothing below 12 pt, nothing outside the body zone, slide number, notes, "Illustrative data"). `node scripts/pilot-redraw.mjs --yes` (one plan call per case, on the planned page from each saved P-2 run), then `scripts/render-pptx.ps1` | All pass (Common Module "Redraw quality") |
 | P-4 | **Timing**: every call's duration from P-1 to P-3 | No call over 24 s; 95% of replies ≤ 20 s; redraws ≤ 60 s |
 | P-5 | **Cost**: input and output tokens per run | Reported to Chris; budget to set |
 | P-6 | **Chris's marks**: `pilot/run-<date>/points.csv`, one row per finding and message, for Chris to mark agree or disagree | ≥ 80% agreed; no false hard stops (Common Module) |

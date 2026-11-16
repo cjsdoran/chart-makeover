@@ -81,7 +81,6 @@
             "required": [
               "name",
               "role",
-              "points",
               "illustrative",
               "cagr"
             ],
@@ -95,6 +94,16 @@
                   "comparison",
                   "other"
                 ]
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "description": "Category charts: one value per category, in category order (shorter than points)"
               },
               "points": {
                 "type": "array",
@@ -131,7 +140,8 @@
                       ]
                     }
                   }
-                }
+                },
+                "description": "Scatter and bubble: each point with x, y (and size, label)"
               },
               "illustrative": {
                 "type": "boolean",

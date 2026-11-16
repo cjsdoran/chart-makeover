@@ -3,9 +3,9 @@ import { config, limits } from '../../shared/limits.js';
 import { withCode } from '../../shared/errorCodes.js';
 import {
   STAGE_NAMES, acceptAllMinor, activeUpload, applyReview, checklistState, continueStage, chooseNameData, chooseRewriteLead, confirmFit,
-  confirmReading, currentStage, moveOn, plannedPage, reopenStage, reviewRequest, sendDeclines, setComparison, submitLead,
+  confirmReading, currentStage, moveOn, reopenStage, reviewRequest, sendDeclines, setComparison, submitLead,
 } from '../engine/engine.js';
-import { PlannedPage } from './Findings.jsx';
+import { Changes } from './Changes.jsx';
 import { Waiting } from './Waiting.jsx';
 
 /**
@@ -13,7 +13,7 @@ import { Waiting } from './Waiting.jsx';
  * an engine function on the session and returns its error, if any. `review(request, accessCode)`
  * makes the review call (/api/review; tests pass canned reviews).
  */
-export function StageInput({ session, act, updateSession, review }) {
+export function StageInput({ session, act, updateSession, review, redraw, onNewRun }) {
   const run = session.run;
   if (run.pending) return <ReviewRunner session={session} updateSession={updateSession} review={review} />;
   if (run.route) return <RouteChoice session={session} act={act} />;
@@ -23,7 +23,7 @@ export function StageInput({ session, act, updateSession, review }) {
   if (session.step === 'chart' && !run.comparison) return <ComparisonPicker act={act} />;
   if (session.step === 'fit') return <FitActions session={session} act={act} />;
   if (stage >= 2 && stage <= 4) return <ChecklistBar session={session} act={act} stage={stage} />;
-  if (session.step === 'changes') return <Changes session={session} />;
+  if (session.step === 'changes') return <Changes session={session} act={act} updateSession={updateSession} redraw={redraw} onNewRun={onNewRun} />;
   return null;
 }
 
@@ -61,7 +61,7 @@ function ReviewRunner({ session, updateSession, review }) {
         return;
       }
       // Applied only if this call is still the one due (no stale reply after a reset).
-      updateSession((s) => (JSON.stringify(s.run.pending) === due ? applyReview(s, r.result.data) : {}), { immediate: true });
+      updateSession((s) => (JSON.stringify(s.run.pending) === due ? applyReview(s, r.result.data, { meta: { promptVersion: r.result.promptVersion, rulesVersion: r.result.rulesVersion, servedBy: r.result.servedBy } }) : {}), { immediate: true });
     });
     // The key covers what the call depends on.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -276,16 +276,6 @@ function FitActions({ session, act }) {
         </form>
       )}
       <ErrorLine error={error} />
-    </div>
-  );
-}
-
-/** Make these changes arrives in milestone 6; until then the planned page is shown here. */
-function Changes({ session }) {
-  return (
-    <div className="composer">
-      <p className="notice" role="status">Make these changes (the redrawn .pptx) and the record arrive in later builds (milestones 6–7).</p>
-      <PlannedPage page={plannedPage(session.run)} />
     </div>
   );
 }
